@@ -54,7 +54,6 @@ const App = () => {
               infinite={true}
               stackSize={3}
               stackSeparation={15}
-              // Your other Swiper configurations
           />
       </View>
   );
