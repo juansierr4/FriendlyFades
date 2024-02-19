@@ -5,9 +5,9 @@ import Swiper from 'react-native-deck-swiper';
 const { width, height } = Dimensions.get('window');
 
 const cardData = [
-    { id: 1, text: 'whats up my yall, who wants to see my giant lizard? Yes, I said that, whats up my yall, who wants to see my giant lizard?', color: 'lightgrey', images: [require('./images/TerryCrews1.jpg'), require('./images/TerryCrews2.jpg')] },
-    { id: 2, text: 'yes brother', color: 'lightblue', images: [require('./images/Khabib1.jpg'), require('./images/Khabib2.webp')] },
-    { id: 3, text: 'hi guys', color: 'lightred', images: [require('./images/Zach1.webp'), require('./images/Zach2.jpg')] },
+    { id: 1, text: 'whats up my yall, who wants to see my giant lizard? Yes, I said that, whats up my yall, who wants to see my giant lizard?', color: 'lightgrey', images: [require('./images/TerryCrews1.jpg'), require('./images/TerryCrews2.jpg')], tags: ['Karate', 'Boxing'] },
+    { id: 2, text: 'yes brother', color: 'lightblue', images: [require('./images/Khabib1.jpg'), require('./images/Khabib2.webp')], tags: ['MMA', 'Wrestling'] },
+    { id: 3, text: 'hi guys', color: 'lightred', images: [require('./images/Zach1.webp'), require('./images/Zach2.jpg')], tags: ['new', 'taekwondo'] },
 ];
 
 const App = () => {
@@ -52,6 +52,13 @@ const App = () => {
               />
               <View style={styles.textSection}>
                 <Text style={styles.text}>{card.text}</Text>
+                <View style={styles.tagsContainer}>
+                  {card.tags.map((tag, index) => (
+                    <View key={index} style={styles.tag}>
+                      <Text style={styles.tagText}>{tag}</Text>
+                    </View>
+                  ))}
+                </View>
               </View>
             </TouchableOpacity>
           );
@@ -76,7 +83,7 @@ const styles = StyleSheet.create({
   card: {
     alignSelf: 'center',
     width: width * 0.95, // Increase width to take up more screen space
-    height: height * 0.95, // Increase height
+    height: height * 0.85, // Increase height
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#E8E8E8',
@@ -110,6 +117,23 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     resizeMode: 'cover',
+  },
+  tagsContainer: {
+    flexDirection: 'row', // Arrange tags in a row
+    flexWrap: 'wrap', // Allow wrapping to the next line
+    justifyContent: 'center', // Center tags horizontally
+    marginTop: 10, // Space from text
+  },
+  tag: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent tag background
+    borderRadius: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    margin: 5,
+  },
+  tagText: {
+    color: '#000', // Text color
+    fontSize: 14,
   },
 });
 
