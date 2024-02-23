@@ -6,9 +6,8 @@ To start Metro, run the folowing command:
 # using npm
 npx expo start
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
 # Troubleshooting
+This app uses npm not yarn
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
