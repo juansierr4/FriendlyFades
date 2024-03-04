@@ -1,2 +1,28 @@
 {
-  "name": "squareup"}
+  "expo": {
+    "name": "squareup",
+    "slug": "squareup",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./images/SquareUpAppLogo.png",
+    "splash": {
+      "image": "./images/background.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.company.SquareUpApp",
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "android": {
+      "package": "com.company.SquareUpApp"
+    }
+  }
+}
