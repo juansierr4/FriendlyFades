@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#800000',
+      padding: 20,
     },
     card: {
       alignSelf: 'center',
@@ -131,20 +132,21 @@ export const styles = StyleSheet.create({
       backgroundColor: '#800000',
     },
     input: {
-      width: '40%',
+      width: width * 0.8, // Adjust width to be 80% of the screen width
       backgroundColor: '#fff',
       padding: 15,
-      marginBottom: 10,
+      marginBottom: 20, // Increase bottom margin for better spacing
       borderRadius: 5,
-      right: 80,
+      alignSelf: 'center', // Ensure this element is centered
       color: '#222222',
     },
     importantinput: {
-        width: '80%',
+        width: width * 0.8, // Adjust width to be 80% of the screen width
         backgroundColor: '#fff',
         padding: 15,
-        marginBottom: 10,
+        marginBottom: 20,
         borderRadius: 5,
+        alignSelf: 'center', // Ensure this element is centered
         color: '#333',
     },
     profileContainer: {
@@ -168,12 +170,25 @@ export const styles = StyleSheet.create({
       borderRadius: 15,
       width: '80%',
       alignItems: 'center',
-      marginBottom: 10,
+      marginTop: 20,
     },
     buttonText: {
       color: '#FFFFFF',
       fontSize: 18,
       fontWeight: 'bold',
+    },
+    datenextbutton: {
+      position: 'absolute', // Position the button absolutely...
+      left: 20,             // ...from the left edge of the container
+      right: 0,            // ...and from the right edge to stretch across
+      bottom: 0,           // ...and from the bottom edge of the container
+      backgroundColor: '#9e2a2b',
+      padding: 15,
+      borderRadius: 15,
+      width: '100%',       // The button will stretch across the bottom
+      alignItems: 'center',
+      justifyContent: 'center', // Center the text inside the button
+      marginBottom: 20, // Add space between the button and the pickers if needed
     },
     switchText: {
       color: '#FFFFFF',
@@ -219,5 +234,53 @@ export const styles = StyleSheet.create({
       width: 40, // Set the width and height of your icon
       height: 40,
     },
+    pickerContainer: {
+      flexDirection: 'row', // Arranges children side by side
+      justifyContent: 'center', // Evenly spaces children
+      alignItems: 'center',
+      width: width, // Takes up the full width
+      paddingHorizontal: 20, // Optional padding for aesthetics
+    },
+    picker: {
+      flex: 1,
+      height: 20,
+      width: '100%',
+    },
+    datepicker: {
+      flex: 1,
+      height: 50,
+      width: '30%',
+    },
+    yearpicker: {
+      flex: 1,
+      height: 50,
+      width: '40%',
+    },
+
+    pickerAndLabelContainer: {
+      width: '80%', // Adjust to control picker width
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#800000', // Ensures consistent background color
+      marginBottom: 20, // Ensures spacing from the Next button
+      height: 50,
+    },
+    weightpicker: {
+      flexGrow: 1, // Allows the picker to grow while leaving space for the label
+      marginRight: 10,
+    },
+    weightLabel: {
+      fontSize: 24, // Adjust font size as needed
+      color: 'white',
+    },
+    pickerLabel: {
+      marginRight: 10, // Adjust spacing as needed
+      fontSize: 24, // Adjust font size as needed
+      color: 'white', // Ensure label is visible against the background
+      top: 40, // Adjust the top position to shift down
+      alignSelf: 'center', // Centers in the parent container    
+    },
   });
+
   
