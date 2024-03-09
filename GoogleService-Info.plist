@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>177546169082-tepap4mffuqkke5ap1chftjvo1hn02cv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.177546169082-tepap4mffuqkke5ap1chftjvo1hn02cv</string>
+	<key>API_KEY</key>
+	<string>AIzaSyATxtjVIbLR6Xxs5pQAKlvrQ6mjPYtE7W0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>177546169082</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.company.SquareUpApp</string>
+	<key>PROJECT_ID</key>
+	<string>squareupapp-2024</string>
+	<key>STORAGE_BUCKET</key>
+	<string>squareupapp-2024.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:177546169082:ios:05f6df3bf255ab4b341743</string>
+</dict>
+</plist>
