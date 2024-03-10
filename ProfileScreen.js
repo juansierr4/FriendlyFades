@@ -168,7 +168,7 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
     <TouchableOpacity onPress={() => Alert.alert('Contact Support')}><Text style={styles.menuItem} >Contact Support</Text></TouchableOpacity>
     <TouchableOpacity onPress={() => navigation.navigate('termsOfService')}><Text style={styles.menuItem} >Terms of Service</Text></TouchableOpacity>
-    <TouchableOpacity onPress={() => Alert.alert('SquareUp Premium')}><Text style={styles.menuItem} >SquareUp Premium</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => Alert.alert('Friendly Fades Premium')}><Text style={styles.menuItem} >Friendly Fades Premium</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleLogout}><Text style={styles.menuItem} >Logout</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleDeleteAccount}><Text style={styles.menuItem} >Delete Account</Text></TouchableOpacity>
   </Animated.View>

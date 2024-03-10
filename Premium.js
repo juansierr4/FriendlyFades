@@ -8,7 +8,7 @@ function Premium({ navigation }) {
   return (
     
     <View style={styles.container}>
-      <Text style={[styles.title, { marginBottom: 40, top: 40 }]}>SquareUp App</Text>
+      <Text style={[styles.title, { marginBottom: 40, top: 40 }]}>Friendly Fades</Text>
       <Text style={styles.tmtitle}>Swipe up</Text>
       <Text style={styles.tmtitle2}>to Square Up</Text>
       </View>

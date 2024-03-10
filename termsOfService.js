@@ -1,19 +1,16 @@
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { styles } from './AppStyles.js';
 
 
-const TermsOfService = ({ navigation }) => {
+const TermsOfService = () => {
   return (
-    <ScrollView contentContainerStyle={styles.contentContainer}>
-      <TouchableOpacity style={styles.backbutton} onPress = {() => navigation.goBack()}>
-        <Text style={styles.backtext}>Back</Text>
-      </TouchableOpacity>
-      <Text style={[styles.heading, { fontSize: 36, marginBottom: 20 }]}>Terms of Service</Text>
+    <ScrollView style={styles.container}>
+      <Text style={[styles.heading, { fontSize: 36, textAlign: 'center', marginBottom: 20 }]}>Terms of Service</Text>
       <Text style={[styles.termstext, { marginBottom: 20 }]}>Last updated March 10, 2024</Text>
       
       <Text style={styles.heading}>AGREEMENT TO OUR LEGAL TERMS</Text>
-      <Text style={styles.text}>We operate the mobile application PunchPals (the "App"), as well as any other related products and services that refer or link to these legal terms (the "Legal Terms") (collectively, the "Services").</Text>
+      <Text style={styles.text}>We operate the mobile application Friendly Fades (the "App"), as well as any other related products and services that refer or link to these legal terms (the "Legal Terms") (collectively, the "Services").</Text>
       <Text style={[styles.termstext, { marginBottom: 20 }]}>You agree that by accessing the Services, you have read, understood, and agreed to be bound by all of these Legal Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.</Text>
       
       <Text style={[styles.termstext, { marginBottom: 20 }]}>iOS App store</Text>
@@ -23,31 +20,31 @@ const TermsOfService = ({ navigation }) => {
       <Text style={[styles.termstext, { marginBottom: 20 }]}>We recommend that you print a copy of these Legal Terms for your records.</Text>
 
       <Text style={[styles.heading, { marginBottom: 20 }]}>TABLE OF CONTENTS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>1. OUR SERVICES</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>2. INTELLECTUAL PROPERTY RIGHTS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>3. USER REPRESENTATIONS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>4. USER REGISTRATION</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>5. PROHIBITED ACTIVITIES</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>6. USER GENERATED CONTRIBUTIONS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>7. CONTRIBUTION LICENSE</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>8. GUIDELINES FOR REVIEWS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>9. MOBILE APPLICATION LICENSE</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>10. ADVERTISERS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>11. SERVICES MANAGEMENT</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>12. PRIVACY POLICY</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>13. TERM AND TERMINATION</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>14. MODIFICATIONS AND INTERRUPTIONS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>15. GOVERNING LAW</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>16. DISPUTE RESOLUTION</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>17. CORRECTIONS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>18. DISCLAIMER</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>19. EXPLICIT DISCLAIMER OF LIABILITY</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>20. LIMITATIONS OF LIABILITY</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>21. INDEMNIFICATION</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>22. USER DATA</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>23. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>24. CALIFORNIA USERS AND RESIDENTS</Text>
-      <Text style={[styles.heading, { marginBottom: 0}]}>25. MISCELLANEOUS</Text>
+      <Text style={styles.heading}>1. OUR SERVICES</Text>
+      <Text style={styles.heading}>2. INTELLECTUAL PROPERTY RIGHTS</Text>
+      <Text style={styles.heading}>3. USER REPRESENTATIONS</Text>
+      <Text style={styles.heading}>4. USER REGISTRATION</Text>
+      <Text style={styles.heading}>5. PROHIBITED ACTIVITIES</Text>
+      <Text style={styles.heading}>6. USER GENERATED CONTRIBUTIONS</Text>
+      <Text style={styles.heading}>7. CONTRIBUTION LICENSE</Text>
+      <Text style={styles.heading}>8. GUIDELINES FOR REVIEWS</Text>
+      <Text style={styles.heading}>9. MOBILE APPLICATION LICENSE</Text>
+      <Text style={styles.heading}>10. ADVERTISERS</Text>
+      <Text style={styles.heading}>11. SERVICES MANAGEMENT</Text>
+      <Text style={styles.heading}>12. PRIVACY POLICY</Text>
+      <Text style={styles.heading}>13. TERM AND TERMINATION</Text>
+      <Text style={styles.heading}>14. MODIFICATIONS AND INTERRUPTIONS</Text>
+      <Text style={styles.heading}>15. GOVERNING LAW</Text>
+      <Text style={styles.heading}>16. DISPUTE RESOLUTION</Text>
+      <Text style={styles.heading}>17. CORRECTIONS</Text>
+      <Text style={styles.heading}>18. DISCLAIMER</Text>
+      <Text style={styles.heading}>19. EXPLICIT DISCLAIMER OF LIABILITY</Text>
+      <Text style={styles.heading}>20. LIMITATIONS OF LIABILITY</Text>
+      <Text style={styles.heading}>21. INDEMNIFICATION</Text>
+      <Text style={styles.heading}>22. USER DATA</Text>
+      <Text style={styles.heading}>23. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</Text>
+      <Text style={styles.heading}>24. CALIFORNIA USERS AND RESIDENTS</Text>
+      <Text style={styles.heading}>25. MISCELLANEOUS</Text>
       <Text style={styles.heading}>26. CONTACT US</Text>
       
       <Text style={styles.heading}>1. OUR SERVICES</Text>
@@ -65,7 +62,7 @@ const TermsOfService = ({ navigation }) => {
       <Text style={[styles.termstext, { marginBottom: 20 }]}>download or print a copy of any portion of the Content to which you have properly gained access.</Text>
       <Text style={styles.text}>solely for your personal, non-commercial use or internal business purpose.</Text>
       <Text style={[styles.termstext, { marginBottom: 20 }]}>Except as set out in this section or elsewhere in our Legal Terms, no part of the Services and no Content or Marks may be copied, reproduced, aggregated, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted, distributed, sold, licensed, or otherwise exploited for any commercial purpose whatsoever, without our express prior written permission.</Text>
-    <Text style={[styles.termstext, { marginBottom: 20 }]}>If you wish to make any use of the Services, Content, or Marks other than as set out in this section or elsewhere in our Legal Terms, please address your request to: support@punchpals.com. If we ever grant you the permission to post, reproduce, or publicly display any part of our Services or Content, you must identify us as the owners or licensors of the Services, Content, or Marks and ensure that any copyright or proprietary notice appears or is visible on posting, reproducing, or displaying our Content.</Text>
+    <Text style={[styles.termstext, { marginBottom: 20 }]}>If you wish to make any use of the Services, Content, or Marks other than as set out in this section or elsewhere in our Legal Terms, please address your request to: support@friendlyfades.com. If we ever grant you the permission to post, reproduce, or publicly display any part of our Services or Content, you must identify us as the owners or licensors of the Services, Content, or Marks and ensure that any copyright or proprietary notice appears or is visible on posting, reproducing, or displaying our Content.</Text>
     <Text style={[styles.termstext, { marginBottom: 20 }]}>We reserve all rights not expressly granted to you in and to the Services, Content, and Marks.</Text>
     <Text style={[styles.termstext, { marginBottom: 20 }]}>Any breach of these Intellectual Property Rights will constitute a material breach of our Legal Terms and your right to use our Services will terminate immediately.</Text>
     <Text style={[styles.termstext, { marginBottom: 20 }]}>Your submissions and contributions</Text>
@@ -142,14 +139,14 @@ const TermsOfService = ({ navigation }) => {
 <Text style={[styles.termstext, { marginBottom: 20 }]}>Any use of the Services in violation of the foregoing violates these Legal Terms and may result in, among other things, termination or suspension of your rights to use the Services.</Text>
 
 <Text style={styles.heading}>7. CONTRIBUTION LICENSE</Text>
-<Text style={[styles.termstext, { marginBottom: 20 }]}>By posting your Contributions to any part of the Services, you automatically grant, and you represent and warrant that you have the right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid, worldwide right, and license to host, use, copy, reproduce, disclose, sell, resell, publish, broadcast, retitle, archive, store, cache, publicly perform, publicly display, reformat, translate, transmit, excerpt (in whole or in part), and distribute such Contributions (including, without limitation, your image and voice) for any purpose, commercial, advertising, or otherwise, and to prepare derivative works of, or incorporate into other works, such Contributions, and grant and authorize sublicenses of the foregoing. The use and distribution may occur in any media formats and through any media channels.</Text>
-<Text style={[styles.termstext, { marginBottom: 20 }]}>This license will apply to any form, media, or technology now known or hereafter developed, and includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide. You waive all moral rights in your Contributions, and you warrant that moral rights have not otherwise been asserted in your Contributions.</Text>
-<Text style={[styles.termstext, { marginBottom: 20 }]}>We do not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. We are not liable for any statements or representations in your Contributions provided by you in any area on the Services. You are solely responsible for your Contributions to the Services and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against us regarding your Contributions.</Text>
-<Text style={[styles.termstext, { marginBottom: 20 }]}>We have the right, in our sole and absolute discretion, (1) to edit, redact, or otherwise change any Contributions; (2) to re-categorize any Contributions to place them in more appropriate locations on the Services; and (3) to pre-screen or delete any Contributions at any time and for any reason, without notice. We have no obligation to monitor your Contributions.</Text>
+<Text style={[styles.termstext { marginBottom: 20 }]}>By posting your Contributions to any part of the Services, you automatically grant, and you represent and warrant that you have the right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid, worldwide right, and license to host, use, copy, reproduce, disclose, sell, resell, publish, broadcast, retitle, archive, store, cache, publicly perform, publicly display, reformat, translate, transmit, excerpt (in whole or in part), and distribute such Contributions (including, without limitation, your image and voice) for any purpose, commercial, advertising, or otherwise, and to prepare derivative works of, or incorporate into other works, such Contributions, and grant and authorize sublicenses of the foregoing. The use and distribution may occur in any media formats and through any media channels.</Text>
+<Text style={[styles.termstext { marginBottom: 20 }]}>This license will apply to any form, media, or technology now known or hereafter developed, and includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide. You waive all moral rights in your Contributions, and you warrant that moral rights have not otherwise been asserted in your Contributions.</Text>
+<Text style={[styles.termstext { marginBottom: 20 }]}>We do not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. We are not liable for any statements or representations in your Contributions provided by you in any area on the Services. You are solely responsible for your Contributions to the Services and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against us regarding your Contributions.</Text>
+<Text style={[styles.termstext { marginBottom: 20 }]}>We have the right, in our sole and absolute discretion, (1) to edit, redact, or otherwise change any Contributions; (2) to re-categorize any Contributions to place them in more appropriate locations on the Services; and (3) to pre-screen or delete any Contributions at any time and for any reason, without notice. We have no obligation to monitor your Contributions.</Text>
 
 <Text style={styles.heading}>8. GUIDELINES FOR REVIEWS</Text>
-<Text style={[styles.termstext, { marginBottom: 20 }]}>We may provide you areas on the Services to leave reviews or ratings. When posting a review, you must comply with the following criteria: (1) you should have firsthand experience with the person/entity being reviewed; (2) your reviews should not contain offensive profanity, or abusive, racist, offensive, or hateful language; (3) your reviews should not contain discriminatory references based on religion, race, gender, national origin, age, marital status, sexual orientation, or disability; (4) your reviews should not contain references to illegal activity; (5) you should not be affiliated with competitors if posting negative reviews; (6) you should not make any conclusions as to the legality of conduct; (7) you may not post any false or misleading statements; and (8) you may not organize a campaign encouraging others to post reviews, whether positive or negative.</Text>
-<Text style={[styles.termstext, { marginBottom: 20 }]}>We may accept, reject, or remove reviews in our sole discretion. We have absolutely no obligation to screen reviews or to delete reviews, even if anyone considers reviews objectionable or inaccurate. Reviews are not endorsed by us, and do not necessarily represent our opinions or the views of any of our affiliates or partners. We do not assume liability for any review or for any claims, liabilities, or losses resulting from any review. By posting a review, you hereby grant to us a perpetual, non-exclusive, worldwide, royalty-free, fully paid, assignable, and sublicensable right and license to reproduce, modify, translate, transmit by any means, display, perform, and/or distribute all content relating to review.</Text>
+<Text style={[styles.termstext { marginBottom: 20 }]}>We may provide you areas on the Services to leave reviews or ratings. When posting a review, you must comply with the following criteria: (1) you should have firsthand experience with the person/entity being reviewed; (2) your reviews should not contain offensive profanity, or abusive, racist, offensive, or hateful language; (3) your reviews should not contain discriminatory references based on religion, race, gender, national origin, age, marital status, sexual orientation, or disability; (4) your reviews should not contain references to illegal activity; (5) you should not be affiliated with competitors if posting negative reviews; (6) you should not make any conclusions as to the legality of conduct; (7) you may not post any false or misleading statements; and (8) you may not organize a campaign encouraging others to post reviews, whether positive or negative.</Text>
+<Text style={[styles.termstext { marginBottom: 20 }]}>We may accept, reject, or remove reviews in our sole discretion. We have absolutely no obligation to screen reviews or to delete reviews, even if anyone considers reviews objectionable or inaccurate. Reviews are not endorsed by us, and do not necessarily represent our opinions or the views of any of our affiliates or partners. We do not assume liability for any review or for any claims, liabilities, or losses resulting from any review. By posting a review, you hereby grant to us a perpetual, non-exclusive, worldwide, royalty-free, fully paid, assignable, and sublicensable right and license to reproduce, modify, translate, transmit by any means, display, perform, and/or distribute all content relating to review.</Text>
 
 <Text style={styles.heading}>9. MOBILE APPLICATION LICENSE</Text>
 <Text style={[styles.termstext, { marginBottom: 20 }]}>Use License</Text>
@@ -197,10 +194,10 @@ const TermsOfService = ({ navigation }) => {
 <Text style={[styles.termstext, {marginBottom: 10}]}>WE DO NOT WARRANT, ENDORSE, GUARANTEE, OR ASSUME RESPONSIBILITY FOR ANY PRODUCT OR SERVICE ADVERTISED OR OFFERED BY A THIRD PARTY THROUGH THE SERVICES, ANY HYPERLINKED WEBSITE, OR ANY WEBSITE OR MOBILE APPLICATION FEATURED IN ANY BANNER OR OTHER ADVERTISING, AND WE WILL NOT BE A PARTY TO OR IN ANY WAY BE RESPONSIBLE FOR MONITORING ANY TRANSACTION BETWEEN YOU AND ANY THIRD-PARTY PROVIDERS OF PRODUCTS OR SERVICES. AS WITH THE PURCHASE OF A PRODUCT OR SERVICE THROUGH ANY MEDIUM OR IN ANY ENVIRONMENT, YOU SHOULD USE YOUR BEST JUDGMENT AND EXERCISE CAUTION WHERE APPROPRIATE.</Text>
 
 <Text style={styles.heading}>19. EXPLICIT DISCLAIMER OF LIABILITY</Text>
-<Text style={[styles.termstext, {marginBottom: 10}]}>RESPONSIBILITY FOR LEGAL COMPLIANCE: USERS OF PUNCHPALS (“THE APP”) ARE SOLELY RESPONSIBLE FOR ENSURING THAT THEIR CONDUCT, INCLUDING BUT NOT LIMITED TO PARTICIPATION IN ACTIVITIES, INTERACTIONS WITH OTHER USERS, AND ANY CONTENT THEY GENERATE OF SHARE THROUGH THE APP, IS IN FULL COMPLIANCE WITH ALL APPLICABLE LAWS, REGULATIONS, AND RULES. USERS MUST EXERCISE THEIR OWN JUDGMENT IN EVALUATING THE LEGALITY OF THEIR ACTIONS IN THEIR RESPECTIVE JURISDICTIONS.</Text>
-<Text style={[styles.termstext, {marginBottom: 10}]}>NO MONITORING OBLIGATION: PUNCHPALS HEREBY DOES NOT HAVE AN OBLIGATION TO MONITOR, REVIEW, OR ASSESS THE LEGALITY OF THE CONTENT GENERATED BY USERS OR THE ACTIVITIES ARRANGED THROUGH THE APP. THE ROLE OF PUNCHPALS IS LIMITED TO PROVIDING A PLATFORM FOR USERS TO CONNECT AND ENGAGE IN ACTIVITIES, AND IT DOES ENDORSE, APPROVE, OR VALIDATE ALL USER-GENERATED CONTENT OR ACTIVITIES.</Text>
-<Text style={[styles.termstext, {marginBottom: 10}]}>DISCLAIMER OF LIABILITY: PUNCHPALS HEREBY DISCLAIMS ALL LIABILITY FOR ANY ACTIONS TAKEN BY USERS OF THE APP THAT MAY BE DEEMED ILLEGAL, UNETHICAL, OR IN VIOLATION OF ANY LAW OR THIRD-PARTY RIGHTS. USERS ASSUME ALL RISKS ASSOCIATED WITH THEIR ACTIVITIES AND INTERACTIONS FACILITATED BY THE APP, INCLUDING, BUT NOT LIMITED TO PERSONAL INJURY, DAMAGE TO PROPERTY, AND LEGAL RAMIFICATIONS.</Text>
-<Text style={[styles.termstext, {marginBottom: 10}]}>USER INDEMNIFICATION: USERS AGREE TO INDEMNIFY AND HOLD HARMLESS PUNCHPALS, ITS AFFILIATES, DIRECTORS, OFFICERS, EMPLOYEES, AND AGENTS FROM AND AGAINST ANY CLAIMS, DAMAGES, OBLIGATIONS, LOSSES, LIABILITIES, COSTS, DEBT, AND EXPENSES (INCLUDING BUT NOT LIMITED TO ATTORNEY’S FEES) ARISING FROM: (I) THEIR USE OF AND ACCESS TO THE APP; (II) THEIR VIOLATION OF ANY TERM OF THESE TERMS OF USE; (III) THEIR VIOLATION OF ANY THIRD-PARTY RIGHT, INCLUDING WITHOUT LIMITATION ANY COPYRIGHT, PRIVACY, PROPERTY, OR PRIVACY RIGHT; OR (IV) ANY CLAIM THAT THEIR CONTENT CAUSE DAMAGE TO A THIRD PARTY. THIS DEFENSE AND INDEMNIFICATION OBLIGATION WILL SURVIVE THESE TERMS OF USE AND YOUR USE OF THE APP.</Text>
+<Text style={[styles.termstext, {marginBottom: 10}]}>RESPONSIBILITY FOR LEGAL COMPLIANCE: USERS OF Friendly Fades (“THE APP”) ARE SOLELY RESPONSIBLE FOR ENSURING THAT THEIR CONDUCT, INCLUDING BUT NOT LIMITED TO PARTICIPATION IN ACTIVITIES, INTERACTIONS WITH OTHER USERS, AND ANY CONTENT THEY GENERATE OF SHARE THROUGH THE APP, IS IN FULL COMPLIANCE WITH ALL APPLICABLE LAWS, REGULATIONS, AND RULES. USERS MUST EXERCISE THEIR OWN JUDGMENT IN EVALUATING THE LEGALITY OF THEIR ACTIONS IN THEIR RESPECTIVE JURISDICTIONS.</Text>
+<Text style={[styles.termstext, {marginBottom: 10}]}>NO MONITORING OBLIGATION: Friendly Fades HEREBY DOES NOT HAVE AN OBLIGATION TO MONITOR, REVIEW, OR ASSESS THE LEGALITY OF THE CONTENT GENERATED BY USERS OR THE ACTIVITIES ARRANGED THROUGH THE APP. THE ROLE OF Friendly Fades IS LIMITED TO PROVIDING A PLATFORM FOR USERS TO CONNECT AND ENGAGE IN ACTIVITIES, AND IT DOES ENDORSE, APPROVE, OR VALIDATE ALL USER-GENERATED CONTENT OR ACTIVITIES.</Text>
+<Text style={[styles.termstext, {marginBottom: 10}]}>DISCLAIMER OF LIABILITY: Friendly Fades HEREBY DISCLAIMS ALL LIABILITY FOR ANY ACTIONS TAKEN BY USERS OF THE APP THAT MAY BE DEEMED ILLEGAL, UNETHICAL, OR IN VIOLATION OF ANY LAW OR THIRD-PARTY RIGHTS. USERS ASSUME ALL RISKS ASSOCIATED WITH THEIR ACTIVITIES AND INTERACTIONS FACILITATED BY THE APP, INCLUDING, BUT NOT LIMITED TO PERSONAL INJURY, DAMAGE TO PROPERTY, AND LEGAL RAMIFICATIONS.</Text>
+<Text style={[styles.termstext, {marginBottom: 10}]}>USER INDEMNIFICATION: USERS AGREE TO INDEMNIFY AND HOLD HARMLESS Friendly Fades, ITS AFFILIATES, DIRECTORS, OFFICERS, EMPLOYEES, AND AGENTS FROM AND AGAINST ANY CLAIMS, DAMAGES, OBLIGATIONS, LOSSES, LIABILITIES, COSTS, DEBT, AND EXPENSES (INCLUDING BUT NOT LIMITED TO ATTORNEY’S FEES) ARISING FROM: (I) THEIR USE OF AND ACCESS TO THE APP; (II) THEIR VIOLATION OF ANY TERM OF THESE TERMS OF USE; (III) THEIR VIOLATION OF ANY THIRD-PARTY RIGHT, INCLUDING WITHOUT LIMITATION ANY COPYRIGHT, PRIVACY, PROPERTY, OR PRIVACY RIGHT; OR (IV) ANY CLAIM THAT THEIR CONTENT CAUSE DAMAGE TO A THIRD PARTY. THIS DEFENSE AND INDEMNIFICATION OBLIGATION WILL SURVIVE THESE TERMS OF USE AND YOUR USE OF THE APP.</Text>
 <Text style={[styles.termstext, {marginBottom: 10}]}>ACKNOWLEDGEMENT BY USERS: BY USING THE APP, USERS ACKNOWLEDGE THAT THEY HAVE READ, UNDERSTOOD, AND AGREED TO THIS EXPLICIT DISCLAIMER OF LIABILITY AND THAT THEY ARE AWARE THAT THEIR USE OF THE APP MAY INVOLVE LEGALLY SIGNIFICANT ACTIONS FOR WHICH THEY ARE SOLELY RESPONSIBLE.</Text>
 
 <Text style={styles.heading}>20. LIMITATIONS OF LIABILITY</Text>
@@ -222,7 +219,7 @@ const TermsOfService = ({ navigation }) => {
 <Text style={[styles.termstext, {marginBottom: 10}]}>These Legal Terms and any policies or operating rules posted by us on the Services or in respect to the Services constitute the entire agreement and understanding between you and us. Our failure to exercise or enforce any right or provision of these Legal Terms shall not operate as a waiver of such right or provision. These Legal Terms operate to the fullest extent permissible by law. We may assign any or all of our rights and obligations to others at any time. We shall not be responsible or liable for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If any provision or part of a provision of these Legal Terms is determined to be unlawful, void, or unenforceable, that provision or part of the provision is deemed severable from these Legal Terms and does not affect the validity and enforceability of any remaining provisions. There is no joint venture, partnership, employment or agency relationship created between you and us as a result of these Legal Terms or use of the Services. You agree that these Legal Terms will not be construed against us by virtue of having drafted them. You hereby waive any and all defenses you may have based on the electronic form of these Legal Terms and the lack of signing by the parties hereto to execute these Legal Terms.</Text>
 
 <Text style={styles.heading}>26. CONTACT US</Text>
-<Text style={[styles.termstext, {marginBottom: 10}]}>In order to resolve a complaint regarding the Services or to receive further information regarding use of the Services, please contact us at: support@punchpals.com</Text>
+<Text style={[styles.termstext, {marginBottom: 10}]}>In order to resolve a complaint regarding the Services or to receive further information regarding use of the Services, please contact us at: support@friendlyfades.com</Text>
 
 
 
@@ -230,7 +227,7 @@ const TermsOfService = ({ navigation }) => {
       {/* Add more sections as needed */}
       
       <Text style={styles.heading}>CONTACT US</Text>
-      <Text style={styles.text}>In order to resolve a complaint regarding the Services or to receive further information regarding use of the Services, please contact us at: support@punchpals.com</Text>
+      <Text style={styles.text}>In order to resolve a complaint regarding the Services or to receive further information regarding use of the Services, please contact us at: support@friendlyfades.com</Text>
     </ScrollView>
   );
 };

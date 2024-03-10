@@ -17,7 +17,7 @@ import { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage
 import LoginScreen from './LoginScreen';
 import TermsOfService from './termsOfService';
 
-import AppIcon from './images/PunchPalsLogo.png';
+import AppIcon from './images/FriendlyFadesLogo.png';
 import MessageIcon from './images/Message.png';
 import ProfileIcon from './images/Profile.png';
 
