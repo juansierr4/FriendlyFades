@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Animated, Alert, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Animated, Alert } from 'react-native';
 import { getFirestore, doc, getDoc, deleteDoc } from 'firebase/firestore'; // Import Firestore
-import { getAuth, deleteUser } from 'firebase/auth'; // Import FirebaseAuth
+import { getAuth, deleteUser, signOut } from 'firebase/auth'; // Import FirebaseAuth
 import { styles } from './AppStyles.js';
 import { Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 const settingsIcon = require('./images/Settings.png');
-const profilePic = require('./images/TerryCrews1.jpg');
+const editIcon = require('./images/editIcon.png');
+
 //Beginning of ProfileScreen Component
 const ProfileScreen = ({ navigation }) => {
     const [userDetails, setUserDetails] = useState({}); // State to store user details
@@ -21,10 +22,12 @@ const ProfileScreen = ({ navigation }) => {
       const user = auth.currentUser;
       if (user) {
         console.log("Fetching document for user UID:", user.uid);
+        const db = getFirestore();
         const userRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
           setUserDetails(docSnap.data());
+          console.log('Fetched user details:', docSnap.data());
         } else {
           console.log("No such document for user UID:", user.uid);
         }
@@ -108,24 +111,51 @@ const ProfileScreen = ({ navigation }) => {
         }
       }
     };
+    const GoPremium = ({ onPress }) => (
+      <View style={styles.goPremiumContainer}>
+        <Text style={styles.goPremiumTitle}>Go Premium</Text>
+        <Text style={styles.goPremiumText}>Unlock exclusive features:</Text>
+        <Text style={styles.goPremiumBenefit}>- Ad-free experience</Text>
+        <Text style={styles.goPremiumBenefit}>- Unlimited access</Text>
+        <Text style={styles.goPremiumBenefit}>- Priority support</Text>
+        <TouchableOpacity style={styles.goPremiumButton} onPress={onPress}>
+          <Text style={styles.goPremiumButtonText}>Upgrade Now</Text>
+        </TouchableOpacity>
+      </View>
+    );
+    const handleLogout = () => {
+      signOut(auth)
+        .then(() => {
+          // Navigate to the login screen or any other screen you prefer after logout
+          navigation.navigate('Login');
+        })
+        .catch(error => {
+          console.error("Error signing out: ", error);
+          Alert.alert("Error", "Failed to sign out. Please try again.");
+        });
+    };
 
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Image source={profilePic} style={styles.profileImage} />
-        <Text style={styles.detailText}>Name: {userDetails.name}</Text>
+        <View style={styles.profileImageContainer}>
+        {userDetails.profileImageUrl ? (
+                <Image source={{ uri: userDetails.profileImageUrl }} style={styles.profileImage} />
+            ) : (
+                // A placeholder image can be shown here if no profile image URL is found
+                <Image source={require('./images/Profile.png')} style={styles.profileImage} />
+            )}
+            <TouchableOpacity 
+                style={styles.editImageButton}
+                onPress={() => navigation.navigate('ViewSelfProfile', { userData: userDetails })} // Assuming 'EditProfileScreen' is the route name
+            ><Image source={editIcon} style={styles.editIcon} />
+            </TouchableOpacity>
+        <Text style={styles.detailText}>{userDetails.name}</Text>
         <Text style={styles.detailText}>Age: {userDetails.age}</Text>
         <Text style={styles.detailText}>Height: {userDetails.height}</Text>
         <Text style={styles.detailText}>Weight: {userDetails.weight}</Text>
-        <TouchableOpacity style={styles.saveButton} onPress={() => handleSaveBio(bio)}>
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.settingsIcon} onPress={() => handleSaveBio(bio)}>
-        </TouchableOpacity>
+        <GoPremium onPress={() => navigation.navigate('Premium')} />
         <TouchableOpacity style={styles.settingsIcon} onPress={toggleSettings}>
           <Image source={settingsIcon} style={styles.settingsImage} />
         </TouchableOpacity>
-        </ScrollView>
   
     <Animated.View style={[
       styles.settingsMenu,
@@ -137,8 +167,9 @@ const ProfileScreen = ({ navigation }) => {
           <Image source={settingsIcon} style={styles.settingsImage} />
         </TouchableOpacity>
     <TouchableOpacity onPress={() => Alert.alert('Contact Support')}><Text style={styles.menuItem} >Contact Support</Text></TouchableOpacity>
-    <TouchableOpacity onPress={() => Alert.alert('Community Guidelines')}><Text style={styles.menuItem} >Community Guidelines</Text></TouchableOpacity>
-    <TouchableOpacity onPress={() => Alert.alert('SquareUp Premium')}><Text style={styles.menuItem} >SquareUp Premium</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('termsOfService')}><Text style={styles.menuItem} >Terms of Service</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => Alert.alert('Friendly Fades Premium')}><Text style={styles.menuItem} >Friendly Fades Premium</Text></TouchableOpacity>
+    <TouchableOpacity onPress={handleLogout}><Text style={styles.menuItem} >Logout</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleDeleteAccount}><Text style={styles.menuItem} >Delete Account</Text></TouchableOpacity>
   </Animated.View>
       </View>

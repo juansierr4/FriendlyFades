@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { getAuth, signInWithCredential, OAuthProvider } from 'firebase/auth';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import { styles } from './AppStyles.js';
@@ -48,7 +48,7 @@ function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Squareup App</Text>
+      <Text style={styles.title}>Friendly Fades</Text>
       <Text style={styles.tmtitle}>Swipe up</Text>
       <Text style={styles.tmtitle2}>to Square Up</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PhoneNumberScreen')}>
@@ -60,6 +60,9 @@ function SignUpScreen({ navigation }) {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.switchText}>Already have an account? Log In</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsOfService')}>
+        <Text style={styles.switchText}>By signing up, you agree to our Terms of Service</Text>
       </TouchableOpacity>
     </View>
   );

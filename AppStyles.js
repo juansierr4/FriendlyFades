@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     },
     card: {
       alignSelf: 'center',
-      width: width * 0.95, // Increase width to take up more screen space
+      width: width, // Increase width to take up more screen space
       height: height * 0.80, // Increase height
       borderRadius: 20,
       borderWidth: 1,
@@ -39,16 +39,38 @@ export const styles = StyleSheet.create({
       borderBottomRightRadius: 20,
     },
     text: {
-      fontSize: 12,
-      fontWeight: 'bold',
+      fontSize: 20,
+      fontFamily: 'Impact',
+      color: '#FFFFFF',
+      textAlign: 'center',
+    },
+    detailsText: {
+      fontSize: 20,
+      fontFamily: 'Impact',
       color: '#FFFFFF',
       textAlign: 'center',
     },
     detailText: {
+      fontFamily: 'Impact',
       fontSize: 24,
-      fontWeight: 'bold',
+      fontWeight: 'normal',
       color: 'black',
-      textAlign: 'center',
+      textAlign: 'left',
+      left: 25,
+      marginVertical: 0, // Reduce or adjust as needed
+      paddingHorizontal: 0, // Adjust if necessary
+    },
+    termstext: {
+      fontSize: 20,
+      fontFamily: 'Times New Roman',
+      color: 'white',
+      textAlign: 'left',
+    },
+    heading: {
+      fontSize: 230,
+      fontFamily: 'Times New Roman',
+      color: 'white',
+      textAlign: 'left',
     },
     title: {
       fontFamily: 'Impact',
@@ -58,6 +80,7 @@ export const styles = StyleSheet.create({
       marginBottom: 80,
     },
     smalltitle: {
+      fontFamily: 'Impact',
       fontSize: 18,
       fontWeight: 'bold',
       color: '#FFFFFF',
@@ -75,39 +98,17 @@ export const styles = StyleSheet.create({
       fontSize: 24,
       fontWeight: 'bold',
       color: '#FFFFFF',
-      marginBottom: 300,
+      marginBottom: 200,
       left: 20,
-    },
-    privacytitle:{
-      fontsize: 12,
-      color: '#FFFFFF',
-      marginBottom: 15,
     },
     cardImage: {
       width: '100%',
-      height: '100%', // Image will take up the entire card size
+      height: '100%',
       borderRadius: 20,
       position: 'absolute',
       top: 0,
       left: 0,
       resizeMode: 'cover',
-    },
-    tagsContainer: {
-      flexDirection: 'row', // Arrange tags in a row
-      flexWrap: 'wrap', // Allow wrapping to the next line
-      justifyContent: 'center', // Center tags horizontally
-      marginTop: 5, // Space from text
-    },
-    tag: {
-      backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent tag background
-      borderRadius: 10,
-      paddingVertical: 5,
-      paddingHorizontal: 10,
-      margin: 5,
-    },
-    tagText: {
-      color: '#000', // Text color
-      fontSize: 12,
     },
     conversation: {
       padding: 20,
@@ -116,12 +117,74 @@ export const styles = StyleSheet.create({
     },
     name: {
       color: '#fff',
+      fontFamily:'Impact',
       fontWeight: 'bold',
       fontSize: 18,
     },
-    lastMessage: {
-      color: '#fff',
-      fontSize: 14,
+    nameText: {
+        fontSize: 20,
+        fontFamily: 'Impact',
+        color: '#FFFFFF',
+        textAlign: 'left',
+        left:20,
+    },
+    modalView: {
+      height: 800,
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5
+    },
+    messageContainer: {
+      width: '100%',
+      paddingHorizontal: 10, // Adjust padding as needed
+      flexDirection: 'row',
+      justifyContent: 'flex-start', // Align items to start; adjust based on your design
+    },
+    messageBubble: {
+      width: '100%',
+      backgroundColor: '#f0f0f0', // A light grey background for the bubble
+      borderRadius: 15, // Rounded corners for a softer look
+      paddingVertical: 10, // Vertical padding to encase the text comfortably
+      paddingHorizontal: 15, // Horizontal padding for the same reason
+      marginVertical: 5, // Slight margin to separate consecutive messages
+      shadowColor: "#000", // Shadow for a subtle depth effect
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.22,
+      shadowRadius: 2.22,
+    },
+    messageText: {
+      color: '#333333', // Dark color for text for better readability
+      fontSize: 16, // Slightly larger font for easy reading
+      lineHeight: 24, // Adequate line height to improve readability
+    },
+    messageBubbleOutgoing: {
+      width: '100%',
+      borderRadius: 15, // Rounded corners for a softer look
+      paddingVertical: 10, // Vertical padding to encase the text comfortably
+      paddingHorizontal: 15, // Horizontal padding for the same reason
+      marginVertical: 5, // Slight margin to separate consecutive messages
+      shadowColor: "#000", // Shadow for a subtle depth effect
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.22,
+      shadowRadius: 2.22,
+      backgroundColor: '#0078FF', // A distinct color for outgoing messages
+      color: '#ffffff', // Light color text for contrast against the bubble color
     },
     chatInputContainer: {
       flexDirection: 'row',
@@ -140,14 +203,28 @@ export const styles = StyleSheet.create({
       alignSelf: 'center', // Ensure this element is centered
       color: '#222222',
     },
+    chatinput: {
+      width: width * 0.8, // Adjust width to be 80% of the screen width
+      borderColor: '#800000',
+      borderWidth: 2, // Increase border width for better visibility
+      padding: 15,
+      marginBottom: 20, // Increase bottom margin for better spacing
+      borderRadius: 5,
+      alignSelf: 'center', // Ensure this element is centered
+      color: '#222222',
+      backgroundColor: '#fff',
+    },
     importantinput: {
-        width: width * 0.8, // Adjust width to be 80% of the screen width
-        backgroundColor: '#fff',
-        padding: 15,
-        marginBottom: 20,
-        borderRadius: 5,
-        alignSelf: 'center', // Ensure this element is centered
-        color: '#333',
+      width: width * 0.8, // Adjust width to be 80% of the screen width
+      backgroundColor: '#fff',
+      padding: 15,
+      marginBottom: 20,
+      borderRadius: 5,
+      alignSelf: 'center', // Ensure this element is centered
+      color: '#333',
+    },
+    accessory:{
+      flex: 1,
     },
     profileContainer: {
       flex: 1,
@@ -155,15 +232,34 @@ export const styles = StyleSheet.create({
       backgroundColor: '#800000',
     },
     profileImage: {
-      width: '80%',
-      height: '50%',
-      borderRadius: 15,
-      marginTop: 20,
+      width: '50%',
+      height: '40%',
+      borderRadius: 40,
+      alignSelf: 'center',
+      marginBottom: 0,
     },
     bioText: {
-      color: '#fff',
-      marginTop: 10,
+        fontSize: 20,
+        fontFamily: 'Impact',
+        color: '#FFFFFF',
+        textAlign: 'center',
     },
+    profileImageContainer: {
+      flex: 1,
+      justifyContent: 'flex-start', // Align items to the top
+      padding: 20, // Adjust as needed
+      margin: 0, // Ensure no extra margin  
+    },
+    editImageButton: {
+      position: 'absolute',
+      borderRadius: 20,   
+      left:20, 
+  },
+    editIcon: {
+      width: 40, // Adjust based on your icon size
+      height: 40, // Adjust based on your icon size
+      borderRadius: 10,   
+  },
     button: {
       backgroundColor: '#9e2a2b',
       padding: 15,
@@ -190,6 +286,15 @@ export const styles = StyleSheet.create({
       justifyContent: 'center', // Center the text inside the button
       marginBottom: 20, // Add space between the button and the pickers if needed
     },
+    messagesButton: {
+      backgroundColor: '#9e2a2b',
+      color: 'white',
+      padding: 15,
+      borderRadius: 15,
+      width: '40%',       // The button will stretch across the bottom
+      justifyContent: 'center', // Center the text inside the button
+      marginTop: 5, // Add space between the button and the pickers if needed
+    },
     switchText: {
       color: '#FFFFFF',
       fontSize: 14,
@@ -213,15 +318,15 @@ export const styles = StyleSheet.create({
       backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dimmed background
     },
     settingsMenu: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: '80%',
-    backgroundColor: '#fff',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: '80%',
+      backgroundColor: '#fff',
+      padding: 20,
+      borderTopLeftRadius: 20,
+      borderBottomLeftRadius: 20,
     },
     settingsIcon: {
       position: 'absolute',
@@ -246,6 +351,12 @@ export const styles = StyleSheet.create({
       height: 20,
       width: '100%',
     },
+    heightpicker: {
+      top: 100,
+      flex: 1,
+      height: 20,    
+      width: '100%',
+    },
     datepicker: {
       flex: 1,
       height: 50,
@@ -256,7 +367,13 @@ export const styles = StyleSheet.create({
       height: 50,
       width: '40%',
     },
-
+    genderLabel: {
+      fontSize: 24, // Adjust font size as needed
+      color: 'white', // Ensure label is visible against the background
+      top: 150, // Adjust the top position to shift down
+      alignSelf: 'center', // Centers in the parent container  
+      marginBottom:100
+    },
     pickerAndLabelContainer: {
       width: '80%', // Adjust to control picker width
       flexDirection: 'row',
@@ -281,6 +398,82 @@ export const styles = StyleSheet.create({
       top: 40, // Adjust the top position to shift down
       alignSelf: 'center', // Centers in the parent container    
     },
+
+
+    goPremiumContainer: {
+      backgroundColor: '#800000', // Maroon background
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 10,
+    },
+    goPremiumTitle: {
+      color: '#FFFFFF',
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 10,
+      marginStart:10,
+    },
+    goPremiumText: {
+      color: '#FFFFFF',
+      fontSize: 18,
+      textAlign: 'center',
+      marginBottom: 5,
+    },
+    goPremiumBenefit: {
+      color: '#FFFFFF',
+      fontSize: 16,
+      textAlign: 'center',
+      marginBottom: 5,
+    },
+    goPremiumButton: {
+      marginTop: 20,
+      backgroundColor: '#FFFFFF', // White button for contrast
+      padding: 15,
+      borderRadius: 25,
+      width: '80%',
+      alignItems: 'center',
+    },
+    goPremiumButtonText: {
+      color: '#800000', // Text color maroon to match the theme
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    moreOptionsButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      padding: 8,
+      borderRadius: 15,
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    },
+    moreOptionsText: {
+      color: 'gray',
+      fontSize: 20,
+    },
+    matchedModalView: {
+      height: 400,
+      width: 400,
+      margin: 20,
+      backgroundColor: "#800000",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 22,
+    },
+
   });
 
   

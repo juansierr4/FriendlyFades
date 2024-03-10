@@ -1,29 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { styles } from './AppStyles.js';
-import { auth } from './firebaseConfig.js'; 
-
+//import messaging from '@react-native-firebase/messaging';
 
 export function PhoneNumberScreen({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmation, setConfirmation] = useState(null);
 
+  useEffect(() => {
+    if (confirmation) {
+            // Navigate to the confirmation screen once confirmation state is set
+      navigation.navigate('ConfirmationScreen', { confirmation });
+    }
+  }, [confirmation, navigation]);
+
   const sendVerificationCode = async () => {
     try {
-      const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
-      if (formattedPhoneNumber.length < 10) { // Adjust minimum length as needed
-        Alert.alert('Error', 'Please enter a valid phone number (minimum 10 digits).');
-        return;
-      }
-
-      const confirmationResult = await auth.signInWithPhoneNumber(formattedPhoneNumber);
-      setConfirmation(confirmationResult);
-      navigation.navigate('ConfirmationScreen', { confirmation: confirmationResult });
+      const fcmToken = await messaging().getToken(); // Assuming this is necessary for your logic
+  
+      const response = await fetch('https://us-central1-squareupapp-2024.cloudfunctions.net/sendVerificationCode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phoneNumber, fcmToken }),
+      });
+  
+      const responseData = await response.json();
+      console.log('Verification triggered successfully:', responseData);
+      // Assuming the server responds with the confirmation object or some identifier
+      setConfirmation(responseData.confirmation);
     } catch (error) {
       console.error('Error sending verification code:', error);
-      Alert.alert('Error', error.message); // Inform user about the error
+      Alert.alert('Error', 'Failed to send verification code. Please try again.');
     }
   };
+  const handleSendCodePress = async () => {
+    await sendVerificationCode();
+    }
+
+
 
   return (
     <View style={styles.container}>
@@ -35,7 +51,7 @@ export function PhoneNumberScreen({ navigation }) {
         value={phoneNumber}
         onChangeText={setPhoneNumber}
       />
-      <TouchableOpacity style={styles.button} onPress={sendVerificationCode}>
+      <TouchableOpacity style={styles.button} onPress={navigation.navigate('NameInput')}>
         <Text style={styles.buttonText}>Send Code</Text>
       </TouchableOpacity>
       {confirmation && (
@@ -48,7 +64,7 @@ export function PhoneNumberScreen({ navigation }) {
       )}
     </View>
   );
-}
+};
 
 export function ConfirmationScreen({ navigation, route }) {
   const { confirmation } = route.params; // Destructure confirmation from route params
@@ -114,7 +130,7 @@ export function EmailInputScreen({ navigation }) {
   export function WelcomeScreen({ navigation }) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Welcome to Squareup App</Text>
+        <Text style={styles.title}>Welcome to Friendly Fades</Text>
         <Text style={styles.text}>Before you start, here are some house rules:</Text>
         {/* Insert your app's house rules here */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateAccount')}>

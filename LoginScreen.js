@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from './firebaseConfig.js';
 import { styles } from './AppStyles.js';
@@ -25,11 +25,20 @@ function LoginScreen({ navigation }) {
 };
 
   return (
+    /*<KeyboardAvoidingView 
+    style={{ flex: 1 }}
+    behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust behavior based on platform
+    keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+  >    */
     <View style={styles.container}>
-      <Text style={styles.title}>SquareUp App</Text>
+      <Text style={[styles.title, { marginBottom: 40, top: 40 }]}>SquareUp App</Text>
       <Text style={styles.tmtitle}>Swipe up</Text>
       <Text style={styles.tmtitle2}>to Square Up</Text>
       
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust behavior based on platform
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+      style={{ flex: 1}}>
       <TextInput
         style={styles.importantinput}
         placeholder="Email"
@@ -46,6 +55,7 @@ function LoginScreen({ navigation }) {
         secureTextEntry
         onChangeText={setPassword}
       />
+      </KeyboardAvoidingView>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>

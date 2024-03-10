@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "squareup",
-    "slug": "squareup",
+    "name": "PunchPals",
+    "slug": "PunchPals",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./images/SquareUpAppLogo.png",

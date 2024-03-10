@@ -4,15 +4,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import './firebaseConfig';
+
 import HomeScreen from './HomeScreen';
 import MessagesScreen from './MessagesScreen';
 import ProfileScreen from './ProfileScreen';
 import SignUpScreen from './SignUpScreen';
+import SelectedUser from './SelectedUser';
+import ViewSelfProfile from './ViewSelfProfile';
 import { PhoneNumberScreen, ConfirmationScreen, EmailInputScreen, WelcomeScreen } from './RegistrationScreens';
-import CreateAccountScreen from './CreateAccountScreen';
+import { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage, BioInput, EmailInput, PasswordInput, FinalStep } from './CreateAccountScreen';
 import LoginScreen from './LoginScreen';
+import TermsOfService from './termsOfService';
 
-import AppIcon from './images/SquareUpAppLogo.png';
+import AppIcon from './images/FriendlyFadesLogo.png';
 import MessageIcon from './images/Message.png';
 import ProfileIcon from './images/Profile.png';
 
@@ -51,10 +56,23 @@ export default function App() {
         <Stack.Screen name="EmailInputScreen" component={EmailInputScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} options={{ headerShown: false }} />
         <Stack.Screen name="PhoneNumberScreen" component={PhoneNumberScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="MessagesScreen" component={MessagesScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CreateAccount" component={CreateAccountScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="NameInput" component={NameInput} options={{ headerShown: false }} />
+        <Stack.Screen name="GenderInput" component={GenderInput} options={{ headerShown: false }} />
+        <Stack.Screen name="AgeInput" component={AgeInput} options={{ headerShown: false }} />
+        <Stack.Screen name="HeightInput" component={HeightInput} options={{ headerShown: false }} />
+        <Stack.Screen name="WeightInput" component={WeightInput} options={{ headerShown: false }} />
+        <Stack.Screen name="UploadImage" component={UploadImage} options={{ headerShown: false }} />
+        <Stack.Screen name="BioInput" component={BioInput} options={{ headerShown: false }} />
+        <Stack.Screen name="EmailInput" component={EmailInput} options={{ headerShown: false }} />
+        <Stack.Screen name="PasswordInput" component={PasswordInput} options={{ headerShown: false }} />
+        <Stack.Screen name="FinalStep" component={FinalStep} options={{ headerShown: false }} />
+        <Stack.Screen name="SelectedUser" component={SelectedUser} options={{ headerShown: false }} />
+        <Stack.Screen name="ViewSelfProfile" component={ViewSelfProfile} options={{ headerShown: false }} />
+        <Stack.Screen name="TermsOfService" component={TermsOfService} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};

@@ -1,4 +1,3 @@
-// CreateAccount.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -14,6 +13,7 @@ function NameInput({ navigation, route }) {
   const [name, setName] = useState('');
   return (
     <View style={styles.container}>
+      <Text style={styles.weightLabel}>What's Your Name?</Text>
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -33,7 +33,7 @@ function GenderInput({ navigation, route }) {
   const [gender, setGender] = useState('');
   return (
     <View style={styles.container}>
-    <Text style={styles.pickerLabel}>Gender</Text>
+    <Text style={styles.genderLabel}>Gender</Text>
       <Picker
         selectedValue={gender}
         style={styles.picker}
@@ -137,7 +137,7 @@ function HeightInput({ navigation, route }) {
     <View style={styles.container}>
       <Picker
         selectedValue={height}
-        style={styles.picker}
+        style={styles.heightpicker}
         itemStyle={{ color: 'white' }}
         onValueChange={(itemValue, itemIndex) => setHeight(itemValue)}
       >
@@ -241,7 +241,7 @@ function WeightInput({ navigation, route }) {
   );
 }
 function UploadImage({ navigation, route }){
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -253,28 +253,34 @@ function UploadImage({ navigation, route }){
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
+      selectionLimit: 4, // No limit on selections
     });
    
     console.log(pickerResult); // Debugging line
 
-    if (!pickerResult.cancelled && pickerResult.assets && pickerResult.assets.length > 0) {
-      const selectedImageUri = pickerResult.assets[0].uri; // Access the uri of the first image
-      setImage(selectedImageUri);
-      console.log('Image URI set:', selectedImageUri);
+    if (!pickerResult.cancelled && pickerResult.assets) {
+      const selectedImageUris = pickerResult.assets.map(asset => asset.uri); // Access the uri of the first image
+      setImages(prevImages => [...prevImages, ...selectedImageUris]); // Append new images to the existing array
+      console.log('Image URIs set:', selectedImageUris);
     }
   };
   const handleNext = async () => {
-    if (!image) {
+    if (images.length ===0) {
       Alert.alert("Please select an image first.");
       return;
     }
-    try{
-    // Upload image and navigate to EmailInput with image URL
-    const url = await uploadImageAsync(image);
-      navigation.navigate('EmailInput', { ...route.params, profileImageUrl: url });
+    try {
+      // Upload images one by one
+      const urls = [];
+      for (const image of images) {
+        const url = await uploadImageAsync(image);
+        urls.push(url);
+      }
+    navigation.navigate('BioInput', { ...route.params, profileImageUrls: urls });
     } catch(error){
+      console.error("Failed to upload images", error);
       Alert.alert("Failed to upload image.");
     }
   };
@@ -282,9 +288,13 @@ function UploadImage({ navigation, route }){
   return (
     <View style = {styles.container}>
       <TouchableOpacity style={styles.button} onPress={pickImage}>
-        <Text>Pick an Image</Text>
+        <Text>Pick Image(s)</Text>
       </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+        {images.map((image, index) => (
+          <Image key={index} source={{ uri: image }} style={{ width: 100, height: 200 }} />
+        ))}
+      </View>
       <TouchableOpacity style={styles.button} onPress={handleNext}>
         <Text>Next</Text>
       </TouchableOpacity>
@@ -293,7 +303,6 @@ function UploadImage({ navigation, route }){
 }
 
 async function uploadImageAsync(uri) {
-  try{
   const response = await fetch(uri);
   const blob = await response.blob();
   const storage = getStorage();
@@ -302,15 +311,34 @@ async function uploadImageAsync(uri) {
   const snapshot = await uploadBytes(storageRef, blob);
   const url = await getDownloadURL(snapshot.ref);
   return url;
-}catch(error) {
-  console.error("Upload failed", error);
-  throw new Error("Upload failed: " + error.message);
-}}
+}
+
+function BioInput({ navigation, route }) {
+  const [bio, setBio] = useState('');
+  return (
+    <View style={styles.container}>
+      <Text style={styles.weightLabel}>Enter a bio describing yourself:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Bio"
+        value={bio}
+        onChangeText={setBio}
+      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('EmailInput', { ...route.params, bio })}
+      >
+        <Text>Next</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 function EmailInput({ navigation, route }) {
   const [email, setEmail] = useState('');
   return (
     <View style={styles.container}>
+      <Text style={styles.weightLabel}>What's Your Email Address?</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -331,6 +359,7 @@ function PasswordInput({ navigation, route }) {
   const [password, setPassword] = useState('');
   return (
     <View style={styles.container}>
+      <Text style={styles.weightLabel}>Enter Password:</Text>
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -353,17 +382,27 @@ function FinalStep({ navigation, route }) {
   const auth = getAuth();
   const db = getFirestore();
 
-  const handleSignUp = () => {
-    const { email, password, name, gender, age, height, weight, profileImageUrl } = route.params;
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        const userRef = doc(db, "users", user.uid);
-        setDoc(userRef, { name, gender, age, height, weight, profileImageUrl })
-          .then(() => navigation.navigate('MainApp'))
-          .catch((error) => Alert.alert("Error", error.message));
-      })
-      .catch((error) => Alert.alert("Sign Up Error", error.message));
+  const handleSignUp = async () => {
+    const { email, password, name, gender, age, height, weight, profileImageUrls, bio } = route.params;
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredentials.user;
+      await setDoc(doc(db, "users", user.uid), { // user.uid is used here
+        name, 
+        gender, 
+        age, 
+        height, 
+        weight, 
+        profileImageUrls, // Ensure this is an array of image URLs
+        bio,
+        uid: user.uid, // Storing user.uid in the document if needed
+        profileImageUrl: profileImageUrls[0],
+      });
+      console.log('User profile created with profileImageUrl:', profileImageUrls[0]);
+      navigation.navigate('MainApp');
+    } catch (error) {
+      Alert.alert("Sign Up Error", error.message);
+    }
   };
 
   return (
@@ -372,8 +411,8 @@ function FinalStep({ navigation, route }) {
         <Text>Create Account</Text>
       </TouchableOpacity>
     </View>
-  );
-}
+  );};
+
 
 // Export all components
-export { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage, EmailInput, PasswordInput, FinalStep };
+export { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage, BioInput, EmailInput, PasswordInput, FinalStep };
