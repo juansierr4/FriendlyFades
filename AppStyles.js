@@ -60,6 +60,18 @@ export const styles = StyleSheet.create({
       marginVertical: 0, // Reduce or adjust as needed
       paddingHorizontal: 0, // Adjust if necessary
     },
+    termstext: {
+      fontSize: 20,
+      fontFamily: 'Times New Roman',
+      color: 'white',
+      textAlign: 'left',
+    },
+    heading: {
+      fontSize: 230,
+      fontFamily: 'Times New Roman',
+      color: 'white',
+      textAlign: 'left',
+    },
     title: {
       fontFamily: 'Impact',
       fontSize: 36,
