@@ -1,12 +1,15 @@
 import React from 'react';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 import { styles } from './AppStyles.js';
 
 
-const TermsOfService = () => {
+const TermsOfService = ({ navigation }) => {
   return (
-    <ScrollView style={styles.container}>
-      <Text style={[styles.heading, { fontSize: 36, textAlign: 'center', marginBottom: 20 }]}>Terms of Service</Text>
+    <ScrollView contentContainerStyle={styles.contentContainer}>
+      <TouchableOpacity style={styles.backbutton} onPress = {() => navigation.goBack()}>
+        <Text style={styles.backtext}>Back</Text>
+      </TouchableOpacity>
+      <Text style={[styles.heading, { fontSize: 36, marginBottom: 20 }]}>Terms of Service</Text>
       <Text style={[styles.termstext, { marginBottom: 20 }]}>Last updated March 10, 2024</Text>
       
       <Text style={styles.heading}>AGREEMENT TO OUR LEGAL TERMS</Text>
@@ -20,31 +23,31 @@ const TermsOfService = () => {
       <Text style={[styles.termstext, { marginBottom: 20 }]}>We recommend that you print a copy of these Legal Terms for your records.</Text>
 
       <Text style={[styles.heading, { marginBottom: 20 }]}>TABLE OF CONTENTS</Text>
-      <Text style={styles.heading}>1. OUR SERVICES</Text>
-      <Text style={styles.heading}>2. INTELLECTUAL PROPERTY RIGHTS</Text>
-      <Text style={styles.heading}>3. USER REPRESENTATIONS</Text>
-      <Text style={styles.heading}>4. USER REGISTRATION</Text>
-      <Text style={styles.heading}>5. PROHIBITED ACTIVITIES</Text>
-      <Text style={styles.heading}>6. USER GENERATED CONTRIBUTIONS</Text>
-      <Text style={styles.heading}>7. CONTRIBUTION LICENSE</Text>
-      <Text style={styles.heading}>8. GUIDELINES FOR REVIEWS</Text>
-      <Text style={styles.heading}>9. MOBILE APPLICATION LICENSE</Text>
-      <Text style={styles.heading}>10. ADVERTISERS</Text>
-      <Text style={styles.heading}>11. SERVICES MANAGEMENT</Text>
-      <Text style={styles.heading}>12. PRIVACY POLICY</Text>
-      <Text style={styles.heading}>13. TERM AND TERMINATION</Text>
-      <Text style={styles.heading}>14. MODIFICATIONS AND INTERRUPTIONS</Text>
-      <Text style={styles.heading}>15. GOVERNING LAW</Text>
-      <Text style={styles.heading}>16. DISPUTE RESOLUTION</Text>
-      <Text style={styles.heading}>17. CORRECTIONS</Text>
-      <Text style={styles.heading}>18. DISCLAIMER</Text>
-      <Text style={styles.heading}>19. EXPLICIT DISCLAIMER OF LIABILITY</Text>
-      <Text style={styles.heading}>20. LIMITATIONS OF LIABILITY</Text>
-      <Text style={styles.heading}>21. INDEMNIFICATION</Text>
-      <Text style={styles.heading}>22. USER DATA</Text>
-      <Text style={styles.heading}>23. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</Text>
-      <Text style={styles.heading}>24. CALIFORNIA USERS AND RESIDENTS</Text>
-      <Text style={styles.heading}>25. MISCELLANEOUS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>1. OUR SERVICES</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>2. INTELLECTUAL PROPERTY RIGHTS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>3. USER REPRESENTATIONS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>4. USER REGISTRATION</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>5. PROHIBITED ACTIVITIES</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>6. USER GENERATED CONTRIBUTIONS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>7. CONTRIBUTION LICENSE</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>8. GUIDELINES FOR REVIEWS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>9. MOBILE APPLICATION LICENSE</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>10. ADVERTISERS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>11. SERVICES MANAGEMENT</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>12. PRIVACY POLICY</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>13. TERM AND TERMINATION</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>14. MODIFICATIONS AND INTERRUPTIONS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>15. GOVERNING LAW</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>16. DISPUTE RESOLUTION</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>17. CORRECTIONS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>18. DISCLAIMER</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>19. EXPLICIT DISCLAIMER OF LIABILITY</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>20. LIMITATIONS OF LIABILITY</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>21. INDEMNIFICATION</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>22. USER DATA</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>23. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>24. CALIFORNIA USERS AND RESIDENTS</Text>
+      <Text style={[styles.heading, { marginBottom: 0}]}>25. MISCELLANEOUS</Text>
       <Text style={styles.heading}>26. CONTACT US</Text>
       
       <Text style={styles.heading}>1. OUR SERVICES</Text>
@@ -139,14 +142,14 @@ const TermsOfService = () => {
 <Text style={[styles.termstext, { marginBottom: 20 }]}>Any use of the Services in violation of the foregoing violates these Legal Terms and may result in, among other things, termination or suspension of your rights to use the Services.</Text>
 
 <Text style={styles.heading}>7. CONTRIBUTION LICENSE</Text>
-<Text style={[styles.termstext { marginBottom: 20 }]}>By posting your Contributions to any part of the Services, you automatically grant, and you represent and warrant that you have the right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid, worldwide right, and license to host, use, copy, reproduce, disclose, sell, resell, publish, broadcast, retitle, archive, store, cache, publicly perform, publicly display, reformat, translate, transmit, excerpt (in whole or in part), and distribute such Contributions (including, without limitation, your image and voice) for any purpose, commercial, advertising, or otherwise, and to prepare derivative works of, or incorporate into other works, such Contributions, and grant and authorize sublicenses of the foregoing. The use and distribution may occur in any media formats and through any media channels.</Text>
-<Text style={[styles.termstext { marginBottom: 20 }]}>This license will apply to any form, media, or technology now known or hereafter developed, and includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide. You waive all moral rights in your Contributions, and you warrant that moral rights have not otherwise been asserted in your Contributions.</Text>
-<Text style={[styles.termstext { marginBottom: 20 }]}>We do not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. We are not liable for any statements or representations in your Contributions provided by you in any area on the Services. You are solely responsible for your Contributions to the Services and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against us regarding your Contributions.</Text>
-<Text style={[styles.termstext { marginBottom: 20 }]}>We have the right, in our sole and absolute discretion, (1) to edit, redact, or otherwise change any Contributions; (2) to re-categorize any Contributions to place them in more appropriate locations on the Services; and (3) to pre-screen or delete any Contributions at any time and for any reason, without notice. We have no obligation to monitor your Contributions.</Text>
+<Text style={[styles.termstext, { marginBottom: 20 }]}>By posting your Contributions to any part of the Services, you automatically grant, and you represent and warrant that you have the right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid, worldwide right, and license to host, use, copy, reproduce, disclose, sell, resell, publish, broadcast, retitle, archive, store, cache, publicly perform, publicly display, reformat, translate, transmit, excerpt (in whole or in part), and distribute such Contributions (including, without limitation, your image and voice) for any purpose, commercial, advertising, or otherwise, and to prepare derivative works of, or incorporate into other works, such Contributions, and grant and authorize sublicenses of the foregoing. The use and distribution may occur in any media formats and through any media channels.</Text>
+<Text style={[styles.termstext, { marginBottom: 20 }]}>This license will apply to any form, media, or technology now known or hereafter developed, and includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide. You waive all moral rights in your Contributions, and you warrant that moral rights have not otherwise been asserted in your Contributions.</Text>
+<Text style={[styles.termstext, { marginBottom: 20 }]}>We do not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. We are not liable for any statements or representations in your Contributions provided by you in any area on the Services. You are solely responsible for your Contributions to the Services and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against us regarding your Contributions.</Text>
+<Text style={[styles.termstext, { marginBottom: 20 }]}>We have the right, in our sole and absolute discretion, (1) to edit, redact, or otherwise change any Contributions; (2) to re-categorize any Contributions to place them in more appropriate locations on the Services; and (3) to pre-screen or delete any Contributions at any time and for any reason, without notice. We have no obligation to monitor your Contributions.</Text>
 
 <Text style={styles.heading}>8. GUIDELINES FOR REVIEWS</Text>
-<Text style={[styles.termstext { marginBottom: 20 }]}>We may provide you areas on the Services to leave reviews or ratings. When posting a review, you must comply with the following criteria: (1) you should have firsthand experience with the person/entity being reviewed; (2) your reviews should not contain offensive profanity, or abusive, racist, offensive, or hateful language; (3) your reviews should not contain discriminatory references based on religion, race, gender, national origin, age, marital status, sexual orientation, or disability; (4) your reviews should not contain references to illegal activity; (5) you should not be affiliated with competitors if posting negative reviews; (6) you should not make any conclusions as to the legality of conduct; (7) you may not post any false or misleading statements; and (8) you may not organize a campaign encouraging others to post reviews, whether positive or negative.</Text>
-<Text style={[styles.termstext { marginBottom: 20 }]}>We may accept, reject, or remove reviews in our sole discretion. We have absolutely no obligation to screen reviews or to delete reviews, even if anyone considers reviews objectionable or inaccurate. Reviews are not endorsed by us, and do not necessarily represent our opinions or the views of any of our affiliates or partners. We do not assume liability for any review or for any claims, liabilities, or losses resulting from any review. By posting a review, you hereby grant to us a perpetual, non-exclusive, worldwide, royalty-free, fully paid, assignable, and sublicensable right and license to reproduce, modify, translate, transmit by any means, display, perform, and/or distribute all content relating to review.</Text>
+<Text style={[styles.termstext, { marginBottom: 20 }]}>We may provide you areas on the Services to leave reviews or ratings. When posting a review, you must comply with the following criteria: (1) you should have firsthand experience with the person/entity being reviewed; (2) your reviews should not contain offensive profanity, or abusive, racist, offensive, or hateful language; (3) your reviews should not contain discriminatory references based on religion, race, gender, national origin, age, marital status, sexual orientation, or disability; (4) your reviews should not contain references to illegal activity; (5) you should not be affiliated with competitors if posting negative reviews; (6) you should not make any conclusions as to the legality of conduct; (7) you may not post any false or misleading statements; and (8) you may not organize a campaign encouraging others to post reviews, whether positive or negative.</Text>
+<Text style={[styles.termstext, { marginBottom: 20 }]}>We may accept, reject, or remove reviews in our sole discretion. We have absolutely no obligation to screen reviews or to delete reviews, even if anyone considers reviews objectionable or inaccurate. Reviews are not endorsed by us, and do not necessarily represent our opinions or the views of any of our affiliates or partners. We do not assume liability for any review or for any claims, liabilities, or losses resulting from any review. By posting a review, you hereby grant to us a perpetual, non-exclusive, worldwide, royalty-free, fully paid, assignable, and sublicensable right and license to reproduce, modify, translate, transmit by any means, display, perform, and/or distribute all content relating to review.</Text>
 
 <Text style={styles.heading}>9. MOBILE APPLICATION LICENSE</Text>
 <Text style={[styles.termstext, { marginBottom: 20 }]}>Use License</Text>
