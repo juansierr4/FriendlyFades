@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "PunchPals",
-    "slug": "PunchPals",
+    "name": "FriendlyFades",
+    "slug": "FriendlyFades",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./images/PunchPalsLogo.png",
+    "icon": "./images/FriendlyFades.png",
     "splash": {
       "image": "./images/background.png",
       "resizeMode": "contain",
@@ -17,7 +17,6 @@
       "**/*"
     ],
     "ios": {
-      "name":"PunchPals",
       "bundleIdentifier": "com.company.SquareUpApp",
       "supportsTablet": true,
       "googleServicesFile": "./GoogleService-Info.plist"

@@ -25,7 +25,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'PunchPals' do
+target 'TinderSwipeEffect' do
   config = use_native_modules!
 
   use_react_native!(
@@ -39,8 +39,8 @@ target 'PunchPals' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'PunchPalsTests' do
-    inherit! :search_paths
+  target 'TinderSwipeEffectTests' do
+    inherit! :complete
     # Pods for testing
   end
 

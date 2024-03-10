@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Text, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { styles } from './AppStyles.js'; // Ensure your styles are defined to reflect your app's design
 
 function NameInputScreen({ navigation }) {

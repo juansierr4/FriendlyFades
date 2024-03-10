@@ -130,7 +130,7 @@ export function EmailInputScreen({ navigation }) {
   export function WelcomeScreen({ navigation }) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Welcome to Squareup App</Text>
+        <Text style={styles.title}>Welcome to Friendly Fades</Text>
         <Text style={styles.text}>Before you start, here are some house rules:</Text>
         {/* Insert your app's house rules here */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateAccount')}>
