@@ -1,0 +1,6 @@
+module ReactNativeKeyboardInput {
+  umbrella header "ReactNativeKeyboardInput-umbrella.h"
+
+  export *
+  module * { export * }
+}

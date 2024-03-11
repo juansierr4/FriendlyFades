@@ -1,0 +1,7 @@
+module fmt {
+  umbrella header "Flipper-Fmt-umbrella.h"
+  exclude header "fmt-umbrella.h"
+
+  export *
+  module * { export * }
+}

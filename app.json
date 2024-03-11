@@ -2,9 +2,12 @@
   "expo": {
     "name": "FriendlyFades",
     "slug": "FriendlyFades",
+    "platforms": [
+      "ios"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./images/FriendlyFades.png",
+    "icon": "./images/FriendlyFadesLogo.png",
     "splash": {
       "image": "./images/background.png",
       "resizeMode": "contain",
@@ -23,6 +26,11 @@
     },
     "android": {
       "package": "com.company.SquareUpApp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1ae72c85-4b1a-4c51-880e-ed44e633e3e1"
+      }
     }
   }
 }

@@ -15,7 +15,7 @@ import ViewSelfProfile from './ViewSelfProfile';
 import { PhoneNumberScreen, ConfirmationScreen, EmailInputScreen, WelcomeScreen } from './RegistrationScreens';
 import { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage, BioInput, EmailInput, PasswordInput, FinalStep } from './CreateAccountScreen';
 import LoginScreen from './LoginScreen';
-import TermsOfService from './termsOfService';
+import termsOfService from './termsOfService';
 
 import AppIcon from './images/FriendlyFadesLogo.png';
 import MessageIcon from './images/Message.png';
@@ -70,7 +70,7 @@ export default function App() {
         <Stack.Screen name="FinalStep" component={FinalStep} options={{ headerShown: false }} />
         <Stack.Screen name="SelectedUser" component={SelectedUser} options={{ headerShown: false }} />
         <Stack.Screen name="ViewSelfProfile" component={ViewSelfProfile} options={{ headerShown: false }} />
-        <Stack.Screen name="TermsOfService" component={TermsOfService} options={{ headerShown: false }} />
+        <Stack.Screen name="termsOfService" component={termsOfService} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

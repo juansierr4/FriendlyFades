@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, Button, Animated } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
-import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import Geolocation from 'react-native-geolocation-service';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { getFirestore, collection, query, where, doc, setDoc, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { styles } from './AppStyles.js';
 
@@ -20,8 +22,43 @@ const HomeScreen = () => {
   const db = getFirestore();
   const auth = getAuth();
 
+  const requestLocationPermission = async () => {
+    let permissionResult = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+    if (permissionResult === RESULTS.DENIED) {
+      permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+    }
+    return permissionResult === RESULTS.GRANTED;
+  };
+
+  const fetchAndStoreUserLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+    if (!hasPermission) {
+      Alert.alert('Location Permission', 'Location permission is required to find users near you.');
+      return;
+    }
+
+    Geolocation.getCurrentPosition(
+      async position => {
+        const { latitude, longitude } = position.coords;
+        const userLocation = { latitude, longitude };
+        //assume method to get uid
+        const currentUserUid = auth.currentUser.uid;
+        //stores location in firebase under user doc
+        await setDoc(doc(db, "users", currentUserUid), { location: userLocation }, { merge: true });
+      },
+      error => {
+        console.error(error);
+        Alert.alert('Error', 'Failed to get your location.');
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+  };
+
   useEffect(() => {
+    fetchAndStoreUserLocation();
     const fetchUsersData = async () => {
+      const { latitude, longitude } = await fetchCurrentUserLocation();
+
       const currentUser = auth.currentUser;
       const dbSwipesRef = collection(db, "swipes");
       const swipesQuery = query(dbSwipesRef, where("swiperId", "==", currentUser.uid));
@@ -32,7 +69,14 @@ const HomeScreen = () => {
         swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
 
         const usersRef = collection(db, "users");
-        const usersQuery = query(usersRef, where("uid", "not-in", [...swipedUserIds, currentUser.uid]));
+        const latRange = [latitude -0.1, latitude + 0.1];
+        const lngRange = [longitude -0.1, longitude + 0.1];
+
+        const usersQuery = query(usersRef, 
+          where("uid", "not-in", [...swipedUserIds, currentUser.uid]),
+          where("latitude", ">=", latRange[0]), where("latitude", "<=", latRange[1]), 
+          where("longitude", ">=", latRange[0]), where("longitude", "<=", lngRange[1]),
+          );
 
         const usersSnapshot = await getDocs(usersQuery);
         const usersData = usersSnapshot.docs.map(doc => ({
@@ -128,6 +172,19 @@ const checkForMatch = async (swiperId, swipedUserId) => {
     await addDoc(collection(db, "matches"), matchEntry);
     console.log(`Match found between ${swiperId} and ${swipedUserId}`);
   }
+};
+
+const fetchCurrentUserLocation = () => {
+  return new Promise((resolve, reject) => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+        resolve({ latitude, longitude });
+      },
+      error => reject(error),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+    );
+  });
 };
 
 const showModal = () => {

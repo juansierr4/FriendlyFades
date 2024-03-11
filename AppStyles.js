@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#800000',
+      padding: 5,
     },
     container: {
       flex: 1,
@@ -67,10 +68,10 @@ export const styles = StyleSheet.create({
       textAlign: 'left',
     },
     heading: {
-      fontSize: 230,
+      fontSize: 24,
       fontFamily: 'Times New Roman',
       color: 'white',
-      textAlign: 'left',
+      alignSelf: 'left',
     },
     title: {
       fontFamily: 'Impact',
