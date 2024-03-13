@@ -81,5 +81,3 @@ target 'FriendlyFades' do
     end
   end
 end
-
-
