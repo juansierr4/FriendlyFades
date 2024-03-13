@@ -44,7 +44,7 @@ target 'FriendlyFades' do
   # Note that if you have use_frameworks! enabled, Flipper will not work
   #
   # if !ENV['CI']
-  use_flipper!()
+  use_react_native!(:flipper_configuration => FlipperConfiguration.default)
   # end
  
   post_install do |installer|
@@ -81,3 +81,5 @@ target 'FriendlyFades' do
     end
   end
 end
+
+
