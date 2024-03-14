@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F06E51757C6AF656F73CEBA4AAE05538"
-               BuildableName = "libRNPermissions.a"
+               BuildableName = "RNPermissions.framework"
                BlueprintName = "RNPermissions"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

@@ -1,4 +1,4 @@
-module Pods_FriendlyFades {
+framework module Pods_FriendlyFades {
   umbrella header "Pods-FriendlyFades-umbrella.h"
 
   export *

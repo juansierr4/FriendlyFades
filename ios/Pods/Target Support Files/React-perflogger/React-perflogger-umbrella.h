@@ -10,8 +10,8 @@
 #endif
 #endif
 
-#import "reactperflogger/BridgeNativeModulePerfLogger.h"
-#import "reactperflogger/NativeModulePerfLogger.h"
+#import "BridgeNativeModulePerfLogger.h"
+#import "NativeModulePerfLogger.h"
 
 FOUNDATION_EXPORT double reactperfloggerVersionNumber;
 FOUNDATION_EXPORT const unsigned char reactperfloggerVersionString[];

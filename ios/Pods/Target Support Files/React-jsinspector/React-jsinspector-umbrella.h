@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#import "jsinspector/InspectorInterfaces.h"
+#import "InspectorInterfaces.h"
 
 FOUNDATION_EXPORT double jsinspectorVersionNumber;
 FOUNDATION_EXPORT const unsigned char jsinspectorVersionString[];

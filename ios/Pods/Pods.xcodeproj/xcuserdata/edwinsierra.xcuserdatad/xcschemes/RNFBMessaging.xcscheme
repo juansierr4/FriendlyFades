@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0CFCC83772CE74C90F09C77D3F09ACAA"
-               BuildableName = "libRNFBMessaging.a"
+               BuildableName = "RNFBMessaging.framework"
                BlueprintName = "RNFBMessaging"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

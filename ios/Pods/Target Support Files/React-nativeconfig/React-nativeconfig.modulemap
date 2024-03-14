@@ -1,4 +1,4 @@
-module react_config {
+framework module React_nativeconfig {
   umbrella header "React-nativeconfig-umbrella.h"
 
   export *

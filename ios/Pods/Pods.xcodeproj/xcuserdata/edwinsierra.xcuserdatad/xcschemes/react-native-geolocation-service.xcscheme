@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5A5B84B7A81039DAA8228E18EC4AC726"
-               BuildableName = "libreact-native-geolocation-service.a"
+               BuildableName = "react_native_geolocation_service.framework"
                BlueprintName = "react-native-geolocation-service"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

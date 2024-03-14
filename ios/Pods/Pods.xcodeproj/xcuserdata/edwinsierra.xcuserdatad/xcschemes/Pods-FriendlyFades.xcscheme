@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AE1EE17A3083FFDACF254A45CCA91ED4"
-               BuildableName = "libPods-FriendlyFades.a"
+               BuildableName = "Pods_FriendlyFades.framework"
                BlueprintName = "Pods-FriendlyFades"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

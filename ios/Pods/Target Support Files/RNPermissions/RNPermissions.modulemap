@@ -1,4 +1,4 @@
-module RNPermissions {
+framework module RNPermissions {
   umbrella header "RNPermissions-umbrella.h"
 
   export *
