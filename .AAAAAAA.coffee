@@ -1,7 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '13.4'
 
-use_modular_headers!
+use_frameworks! :linkage => :static
 
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
@@ -9,7 +9,21 @@ require File.join(File.dirname(`node --print "require.resolve('@react-native-com
 
 target 'FriendlyFades' do
   use_expo_modules!
-  config = use_frameworks! :linkage => :static
+  config = use_native_modules!
+
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies){}
+
+  installer.pod_targets.each do |pod|
+    if pod.name.eql?('RNPermissions') || pod.name.start_with?('Permission-')
+      def pod.build_type;
+        Pod::BuildType.static_library
+      end
+    end
+  end
+end
+
+
 
   # Firebase Pods
   pod 'Firebase/CoreOnly', '10.22.0'
@@ -22,8 +36,14 @@ target 'FriendlyFades' do
   # React Native and Expo autolinking
   use_react_native!(
     :path => config[:reactNativePath],
-    :hermes_enabled => false # Modify as needed for Hermes
+    :hermes_enabled => false, # Modify as needed for Hermes
+    :fabric_enabled => flags[:fabric_enabled],
   )
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+
 
   post_install do |installer|
     react_native_post_install(installer)
