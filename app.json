@@ -21,16 +21,33 @@
     ],
     "ios": {
       "bundleIdentifier": "com.company.SquareUpApp",
-      "supportsTablet": true,
       "googleServicesFile": "./GoogleService-Info.plist"
-    },
-    "android": {
-      "package": "com.company.SquareUpApp"
     },
     "extra": {
       "eas": {
         "projectId": "1ae72c85-4b1a-4c51-880e-ed44e633e3e1"
       }
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "expo-dev-launcher",
+        {
+          "launchModeExperimental": "most-recent"
+        }
+      ]
+    ],
+    "android": {
+      "package": "com.company.SquareUpApp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     }
   }
 }

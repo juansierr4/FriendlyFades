@@ -1,3 +1,4 @@
+import 'expo-dev-client';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, Button, Animated } from 'react-native';
 import Swiper from 'react-native-deck-swiper';

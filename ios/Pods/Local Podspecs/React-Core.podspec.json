@@ -1,6 +1,6 @@
 {
   "name": "React-Core",
-  "version": "0.73.5",
+  "version": "0.73.4",
   "summary": "The core of React Native.",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.73.5"
+    "tag": "v0.73.4"
   },
   "resource_bundles": {
     "RCTI18nStrings": [
@@ -28,14 +28,12 @@
       "$(PODS_ROOT)/fmt/include",
       "$(PODS_ROOT)/RCT-Folly",
       "${PODS_ROOT}/Headers/Public/FlipperKit",
-      "$(PODS_ROOT)/Headers/Public/ReactCommon",
-      "$(PODS_ROOT)/Headers/Public/React-hermes",
-      "$(PODS_ROOT)/Headers/Public/hermes-engine"
+      "$(PODS_ROOT)/Headers/Public/ReactCommon"
     ],
     "DEFINES_MODULE": "YES",
     "GCC_PREPROCESSOR_DEFINITIONS": "RCT_METRO_PORT=${RCT_METRO_PORT}",
     "CLANG_CXX_LANGUAGE_STANDARD": "c++20",
-    "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_CONFIGURATION_BUILD_DIR)/React-hermes\""
+    "FRAMEWORK_SEARCH_PATHS": ""
   },
   "user_target_xcconfig": {
     "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/Headers/Private/React-Core\""
@@ -72,10 +70,7 @@
     "glog": [
 
     ],
-    "React-hermes": [
-
-    ],
-    "hermes-engine": [
+    "React-jsc": [
 
     ]
   },
@@ -89,8 +84,7 @@
         "React/Fabric/**/*",
         "React/FBReactNativeSpec/**/*",
         "React/Tests/**/*",
-        "React/Inspector/**/*",
-        "React/CxxBridge/JSCExecutorFactory.{h,mm}"
+        "React/Inspector/**/*"
       ],
       "private_header_files": "React/Cxx*/*.h"
     },
@@ -102,13 +96,13 @@
       ],
       "dependencies": {
         "React-Core/Default": [
-          "0.73.5"
+          "0.73.4"
         ],
         "React-Core/RCTWebSocket": [
-          "0.73.5"
+          "0.73.4"
         ],
         "React-jsinspector": [
-          "0.73.5"
+          "0.73.4"
         ]
       }
     },
@@ -117,7 +111,7 @@
       "source_files": "Libraries/WebSocket/*.{h,m}",
       "dependencies": {
         "React-Core/Default": [
-          "0.73.5"
+          "0.73.4"
         ]
       }
     },

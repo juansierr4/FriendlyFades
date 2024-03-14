@@ -1,6 +1,6 @@
 {
   "name": "React-Codegen",
-  "version": "0.73.5",
+  "version": "0.73.4",
   "summary": "Temp pod for generated files for React Native",
   "homepage": "https://facebook.com/",
   "license": "Unlicense",
@@ -54,7 +54,7 @@
     "DoubleConversion": [
 
     ],
-    "hermes-engine": [
+    "React-jsc": [
 
     ],
     "React-rncore": [

@@ -1,3 +1,4 @@
+import 'expo-dev-client';
 import React from 'react';
 import { Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
