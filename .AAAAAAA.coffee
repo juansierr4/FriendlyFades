@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, Modal, Button, Animated } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -12,38 +12,43 @@ const HomeScreen = () => {
   const [swiperKey, setSwiperKey] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [matchModalVisible, setMatchModalVisible] = useState(false);
+  const [matchedUserName, setMatchedUserName] = useState('');
+  const [matchedUserImageUrl, setMatchedUserImageUrl] = useState(null);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial fade anim value
+
   const db = getFirestore();
   const auth = getAuth();
 
-    useEffect(() => {
-        const fetchUsersData = async () => {
-        const currentUser = auth.currentUser;
-        const dbSwipesRef = collection(db, "swipes");
-        const swipesQuery = query(dbSwipesRef, where("swiperId", "==", currentUser.uid));
-        let swipedUserIds = [];
-    
-        try {
-            const swipesSnapshot = await getDocs(swipesQuery);
-            swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
-    
-            const usersRef = collection(db, "users");
-            const usersQuery = query(usersRef, where("uid", "not-in", [...swipedUserIds, currentUser.uid]));
-    
-            const usersSnapshot = await getDocs(usersQuery);
-            const usersData = usersSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            images: doc.data().profileImageUrls // Adjust based on your actual image field
-            }));
-    
-            setUsers(usersData);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-        };
-    
-        fetchUsersData();
-    }, [auth.currentUser]);
+  useEffect(() => {
+    const fetchUsersData = async () => {
+      const currentUser = auth.currentUser;
+      const dbSwipesRef = collection(db, "swipes");
+      const swipesQuery = query(dbSwipesRef, where("swiperId", "==", currentUser.uid));
+      let swipedUserIds = [];
+
+      try {
+        const swipesSnapshot = await getDocs(swipesQuery);
+        swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
+
+        const usersRef = collection(db, "users");
+        const usersQuery = query(usersRef, where("uid", "not-in", [...swipedUserIds, currentUser.uid]));
+
+        const usersSnapshot = await getDocs(usersQuery);
+        const usersData = usersSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          images: doc.data().profileImageUrls // Adjust based on your actual image field
+        }));
+
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsersData();
+  }, [auth.currentUser]);
 
   const handleMoreOptions = (userId) => {
     setSelectedUser(userId);
@@ -102,21 +107,43 @@ const handleSwipeBottom = async (cardIndex) => {
 
 const checkForMatch = async (swiperId, swipedUserId) => {
   const swipesRef = collection(db, "swipes");
-  // Query for swipes where the swiped user has liked the swiper
   const q = query(swipesRef, where("swiperId", "==", swipedUserId), where("swipedId", "==", swiperId), where("action", "==", "like"));
 
   const querySnapshot = await getDocs(q);
 
   if (!querySnapshot.empty) {
+    // Find matched user's data
     // Match found, create a new document in the 'matches' collection
     const matchEntry = {
       userIds: [swiperId, swipedUserId],
       timestamp: serverTimestamp(),
     };
-
+    const matchedUser = users.find(user => user.id === swipedUserId);
+    if (matchedUser) {
+      setMatchedUserImageUrl(matchedUser.images[0]); // Assuming images[0] is the profile image
+      setMatchedUserName(matchedUser.name); // Store the matched user's name
+      setMatchModalVisible(true);
+      showModal();
+    }
     await addDoc(collection(db, "matches"), matchEntry);
     console.log(`Match found between ${swiperId} and ${swipedUserId}`);
   }
+};
+
+const showModal = () => {
+  Animated.timing(fadeAnim, {
+    toValue: 1,
+    duration: 500,
+    useNativeDriver: true, // Add this line
+  }).start();
+
+  setTimeout(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true, // Add this line
+    }).start(() => setMatchModalVisible(false));
+  }, 3000);
 };
 
 return (
@@ -138,7 +165,7 @@ return (
           stackSeparation={15}
           useViewOverflow={Platform.OS === 'ios'}
           cards={users}
-          
+
           renderCard={(user) => {
             const currentImageIndex = currentImageIndices[user.id] || 0;
             const showDetails = currentImageIndex === 0;
@@ -163,7 +190,7 @@ return (
                     <>
                       <Text style={styles.detailsText}>Age: {user.age}</Text>
                       <Text style={styles.detailsText}>Height: {user.height}</Text>
-                      <Text style={styles.detailsText}>Weight: {user.weight}</Text>
+                      <Text style={styles.detailsText}>Weight: {user.weight}lbs</Text>
                     </>
                   ) : (
                     <Text style={styles.bioText}>{user.bio}</Text>
@@ -190,8 +217,28 @@ return (
         </Modal>
       </>
     ) : (
-      <Text>Loading...</Text>
+      <Text>There are no more users in your area. Come back another time...</Text>
     )}
+    <Modal
+        animationType="none"
+        transparent={true}
+        visible={matchModalVisible}
+        onRequestClose={() => {
+          setMatchModalVisible(!matchModalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <Animated.View style={[styles.matchedModalView, {opacity: fadeAnim}]}>
+            <Image
+              source={{ uri: matchedUserImageUrl }}
+              style={{ width: 100, height: 100, borderRadius: 50 }}
+              resizeMode="cover"
+            />
+            <Text style={{ marginTop: 10, fontSize: 20, color: 'white', fontWeight: 'bold' }}>MATCHED with {matchedUserName}</Text>
+            <Text style={{ marginTop: 20, fontSize: 20, color: 'white', fontWeight: 'bold' }}> FIGHT </Text>
+
+          </Animated.View>
+        </View>
+      </Modal>
   </View>
 );
 }; //End of Home Screen Component
