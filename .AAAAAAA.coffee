@@ -101,12 +101,3 @@ const HomeScreen = () => {
       );
     });
   };
-
-  // Rest of the component code for rendering, handling swipes, and showing modals...
-
-  return (
-    <View style={styles.container}>
-      {/* UI Components */}
-    </View>
-  );
-};
