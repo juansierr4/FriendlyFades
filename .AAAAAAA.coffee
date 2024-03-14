@@ -13,7 +13,7 @@ const HomeScreen = () => {
   const db = getFirestore();
   const auth = getAuth();
 
-  const requestLocationPermission = async () => {
+const requestLocationPermission = async () => {
     let permissionResult = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
     if (permissionResult === RESULTS.DENIED) {
       permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -32,9 +32,7 @@ const HomeScreen = () => {
       async position => {
         const { latitude, longitude } = position.coords;
         const geohash = geohashForLocation([latitude, longitude]);
-        //assume method to get uid
         const currentUserUid = auth.currentUser.uid;
-        //stores location in firebase under user doc
         await setDoc(doc(db, "users", currentUserUid), { location: {latitude, longitude, geohash} }, { merge: true });
       },
       error => {
@@ -51,30 +49,45 @@ const HomeScreen = () => {
     const swipesRef = collection(db, "swipes");
     const swipesQuery = query(swipesRef, where("swiperId", "==", currentUserUid));
     const swipesSnapshot = await getDocs(swipesQuery);
-    const swipesUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
+    const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
 
-    const radiusInM = 10000;
+    const radiusInM = 10000; // Define search radius
     const bounds = geohashQueryBounds([latitude, longitude], radiusInM);
     const promises = bounds.map(b => {
-      const q = query(collection(db, "users"), orderByd("location.geohash"), startAt(b[0]), endAt(b[1]));
+      const q = query(collection(db, "users"), orderBy("location.geohash"), startAt(b[0]), endAt(b[1]));
       return getDocs(q);
     });
 
     const snapshots = await Promise.all(promises);
     let matchingDocs = [];
 
-    for (const snap of snapshots) {
-      for (const doc of snap.docs) {
+    snapshots.forEach(snap => {
+      snap.docs.forEach(doc => {
         const location = doc.data().location;
         const distanceInM = distanceBetween([location.latitude, location.longitude], [latitude, longitude]);
-        if (distanceInM <= radiusInM){
+        if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id)) {
           matchingDocs.push({ ...doc.data(), id: doc.id });
         }
-      }
-    }
-    setUsers(matchingDocs.filter(user => !swipedUserId.includes(user.id)));
+      });
+    });
+
+    setUsers(matchingDocs);
   };
-  
+
   useEffect(() => {
     fetchAndStoreUserLocation().then(fetchUsersData);
-  }, []);
+  }, []); // Dependency array left empty to run once on mount
+
+  // The rest of your component...
+
+  const fetchCurrentUserLocation = () => {
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          resolve({ latitude, longitude });
+        },
+        error => reject(error),
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      );
+    });
