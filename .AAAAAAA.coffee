@@ -101,3 +101,119 @@ const HomeScreen = () => {
       );
     });
   };
+
+const showModal = () => {
+  Animated.timing(fadeAnim, {
+    toValue: 1,
+    duration: 500,
+    useNativeDriver: true, // Add this line
+  }).start();
+
+  setTimeout(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true, // Add this line
+    }).start(() => setMatchModalVisible(false));
+  }, 3000);
+};
+
+return (
+  <View style={styles.container}>
+    {users.length > 0 ? (
+      <>
+        <Swiper
+          key={swiperKey}
+          backgroundColor='#800000'
+          cardHorizontalMargin={0}
+          cardVerticalMargin={0}
+          verticalSwipe={true}
+          horizontalSwipe={false}
+          onSwipedTop={handleSwipeTop}
+          onSwipedBottom={handleSwipeBottom}
+          onSwiped={handleSwipe}
+          cardIndex={currentCardIndex}
+          stackSize={3}
+          stackSeparation={15}
+          useViewOverflow={Platform.OS === 'ios'}
+          cards={users}
+          
+          renderCard={(user) => {
+            const currentImageIndex = currentImageIndices[user.id] || 0;
+            const showDetails = currentImageIndex === 0;
+
+            return (
+              <TouchableOpacity 
+                style={styles.card}
+                onPress={() => handleTapImage(user.id)}
+                activeOpacity={1}
+              >
+                <Image
+                  source={{ uri: user.images[currentImageIndex] }}
+                  style={styles.cardImage}
+                  resizeMode="cover"
+                />
+                <TouchableOpacity style={styles.moreOptionsButton} onPress={() => handleMoreOptions(user.id)}>
+                  <Text style={styles.moreOptionsText}>•••</Text>
+                </TouchableOpacity>
+                <View style={styles.textSection}>
+                  <Text style={styles.nameText}>{user.name}</Text>
+                  {showDetails ? (
+                    <>
+                      <Text style={styles.detailsText}>Age: {user.age}</Text>
+                      <Text style={styles.detailsText}>Height: {user.height}</Text>
+                      <Text style={styles.detailsText}>Weight: {user.weight}lbs</Text>
+                    </>
+                  ) : (
+                    <Text style={styles.bioText}>{user.bio}</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Button title="Block User" onPress={handleBlockUser} />
+              <Button title="Report User" onPress={handleReportUser} />
+              <Button title="Cancel" onPress={() => setModalVisible(!modalVisible)} />
+            </View>
+          </View>
+        </Modal>
+      </>
+    ) : (
+      <Text>There are no more users in your area. Come back another time...</Text>
+    )}
+    <Modal
+        animationType="none"
+        transparent={true}
+        visible={matchModalVisible}
+        onRequestClose={() => {
+          setMatchModalVisible(!matchModalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <Animated.View style={[styles.matchedModalView, {opacity: fadeAnim}]}>
+            <Image
+              source={{ uri: matchedUserImageUrl }}
+              style={{ width: 100, height: 100, borderRadius: 50 }}
+              resizeMode="cover"
+            />
+            <Text style={{ marginTop: 10, fontSize: 20, color: 'white', fontWeight: 'bold' }}>MATCHED with {matchedUserName}</Text>
+            <Text style={{ marginTop: 20, fontSize: 20, color: 'white', fontWeight: 'bold' }}> FIGHT </Text>
+
+          </Animated.View>
+        </View>
+      </Modal>
+  </View>
+);
+}; //End of Home Screen Component
+
+  export default HomeScreen;
+  
