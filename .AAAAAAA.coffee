@@ -1,16 +1,37 @@
-Expected package metro-resolver@~0.80.4
-Found invalid:
-  metro-resolver@0.79.1
-  (for more info, run: npm why metro-resolver)
-Expected package metro-config@~0.80.4
-Found invalid:
-  metro-config@0.79.1
-  (for more info, run: npm why metro-config)
-Advice: Upgrade dependencies that are using the invalid package versions0.
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '13.4'
 
-The package "expo-modules-core" should not be installed directly in your project. It is a dependency of other Expo packages, which will install it automatically as needed.
-The package "expo-dev-launcher" should not be installed directly in your project. It is a dependency of other Expo packages, which will install it automatically as needed.
+use_modular_headers!
 
-This project has native project folders but is also configured to use Prebuild. EAS Build will not sync your native configuration if the ios or android folders are present. Add these folders to your .gitignore file if you intend to use prebuild (aka "managed" workflow).
+require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
+require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
+require File.join(File.dirname(`node --print "require.resolve('@react-native-community/cli-platform-ios/package.json')"`), "native_modules")
 
-One or more checks failed, indicating possible issues with the project.
+target 'FriendlyFades' do
+  use_expo_modules!
+  config = use_frameworks! :linkage => :static
+
+  # Firebase Pods
+  pod 'Firebase/CoreOnly', '10.22.0'
+  pod 'FirebaseAuth', '10.22.0'
+  pod 'FirebaseFirestore', '10.22.0'
+  pod 'FirebaseMessaging', '10.22.0'
+  pod 'FirebaseStorage', '10.22.0'
+  # No need to specify modular_headers for individual pods now
+
+  # React Native and Expo autolinking
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => false # Modify as needed for Hermes
+  )
+
+  post_install do |installer|
+    react_native_post_install(installer)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        #config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+      end
+    end
+  end
+end
