@@ -54,36 +54,37 @@ const HomeScreen = () => {
     );
   };
 
-  const fetchUsersData = async () => {
-    const { latitude, longitude } = await fetchCurrentUserLocation();
-    const currentUserUid = auth.currentUser.uid;
-    const swipesRef = collection(db, "swipes");
-    const swipesQuery = query(swipesRef, where("swiperId", "==", currentUserUid));
-    const swipesSnapshot = await getDocs(swipesQuery);
-    const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
+    useEffect(() => {
+      const fetchUsersData = async () => {
+        const { latitude, longitude } = await fetchCurrentUserLocation();
+        const currentUserUid = auth.currentUser.uid;
+        const swipesRef = collection(db, "swipes");
+        const swipesQuery = query(swipesRef, where("swiperId", "==", currentUserUid));
+        const swipesSnapshot = await getDocs(swipesQuery);
+        const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
 
-    const radiusInM = 10000; // Define search radius
-    const bounds = geohashQueryBounds([latitude, longitude], radiusInM);
-    const promises = bounds.map(b => {
-      const q = query(collection(db, "users"), orderBy("location.geohash"), startAt(b[0]), endAt(b[1]));
-      return getDocs(q);
-    });
+        const radiusInM = 10000; // Define search radius
+        const bounds = geohashQueryBounds([latitude, longitude], radiusInM);
+        const promises = bounds.map(b => {
+          const q = query(collection(db, "users"), orderBy("location.geohash"), startAt(b[0]), endAt(b[1]));
+          return getDocs(q);
+        });
 
-    const snapshots = await Promise.all(promises);
-    let matchingDocs = [];
+        const snapshots = await Promise.all(promises);
+        let matchingDocs = [];
 
-    snapshots.forEach(snap => {
-      snap.docs.forEach(doc => {
-        const location = doc.data().location;
-        const distanceInM = distanceBetween([location.latitude, location.longitude], [latitude, longitude]);
-        if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id)) {
-          matchingDocs.push({ ...doc.data(), id: doc.id });
-        }
-      });
-    });
+        snapshots.forEach(snap => {
+          snap.docs.forEach(doc => {
+            const location = doc.data().location;
+            const distanceInM = distanceBetween([location.latitude, location.longitude], [latitude, longitude]);
+            if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id)) {
+              matchingDocs.push({ ...doc.data(), id: doc.id });
+            }
+          });
+        });
 
-    setUsers(matchingDocs);
-  };
+      setUsers(matchingDocs);
+    };
 
   useEffect(() => {
     fetchAndStoreUserLocation().then(fetchUsersData);
@@ -101,6 +102,64 @@ const HomeScreen = () => {
       );
     });
   };
+
+const handleSwipe = (cardIndex) => {
+    setCurrentCardIndex(cardIndex + 1);
+  };
+
+const handleSwipeTop = async (cardIndex) => {
+    const swipedUserId = users[cardIndex].id;
+    const swiperId = auth.currentUser.uid;
+
+    await addDoc(collection(db, "swipes"), {
+      swiperId,
+      swipedId: swipedUserId,
+      action: "like",
+      timestamp: serverTimestamp(),
+    });
+
+    checkForMatch(swiperId, swipedUserId);
+  }
+
+const handleSwipeBottom = async (cardIndex) => {
+  const swipedUserId = users[cardIndex].id;
+  const swiperId = auth.currentUser.uid;
+
+  await addDoc(collection(db, "swipes"), {
+    swiperId,
+    swipedId: swipedUserId,
+    action: "dislike",
+    timestamp: serverTimestamp(),
+  });
+};
+
+
+
+const checkForMatch = async (swiperId, swipedUserId) => {
+  const swipesRef = collection(db, "swipes");
+  const q = query(swipesRef, where("swiperId", "==", swipedUserId), where("swipedId", "==", swiperId), where("action", "==", "like"));
+
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    // Find matched user's data
+    // Match found, create a new document in the 'matches' collection
+    const matchEntry = {
+      userIds: [swiperId, swipedUserId],
+      timestamp: serverTimestamp(),
+    };
+    const matchedUser = users.find(user => user.id === swipedUserId);
+    if (matchedUser) {
+      setMatchedUserImageUrl(matchedUser.images[0]); // Assuming images[0] is the profile image
+      setMatchedUserName(matchedUser.name); // Store the matched user's name
+      setMatchModalVisible(true);
+      showModal();
+    }
+    await addDoc(collection(db, "matches"), matchEntry);
+    console.log(`Match found between ${swiperId} and ${swipedUserId}`);
+  }
+};
+
 
 const showModal = () => {
   Animated.timing(fadeAnim, {
