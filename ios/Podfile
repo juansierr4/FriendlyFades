@@ -1,50 +1,26 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '13.4'
-require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
-require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
-require File.join(File.dirname(`node --print "require.resolve('@react-native-community/cli-platform-ios/package.json')"`), "native_modules")
-require 'json'
 
-podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties.json'))) rescue {}
-
-install! 'cocoapods', deterministic_uuids: false
+# Auto-linking for dependencies
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/react-native-unimodules/cocoapods'
 
 target 'FriendlyFades' do
-  use_expo_modules!
-  config = use_native_modules!
+  use_react_native!
+  use_unimodules!
+  use_native_modules!
 
+  # Specify Firebase pods with explicit versions
   pod 'Firebase/CoreOnly', '10.22.0'
-  pod 'FirebaseFirestore', '10.22.0'
   pod 'FirebaseAuth', '10.22.0'
+  pod 'FirebaseFirestore', '10.22.0'
   pod 'FirebaseMessaging', '10.22.0'
   pod 'FirebaseStorage', '10.22.0'
-  pod 'FirebaseFirestore', '10.22.0'
-
-  pod 'Firebase', modular_headers: true
-  pod 'FirebaseCore', modular_headers: true
-  pod 'FirebaseCoreInternal', modular_headers: true
-  pod 'FirebaseStorageInternal', modular_headers: true
-  pod 'FirebaseCoreExtension', modular_headers: true
-  pod 'FirebaseAppCheckInterop', modular_headers: true
-  pod 'FirebaseAuthInterop', modular_headers: true
-  pod 'FirebaseMessagingInterop', modular_headers: true
-  pod 'GTMSessionFetcher', modular_headers: true
-  pod 'GoogleUtilities', modular_headers: true
-
-  use_react_native!(
-    path: config[:reactNativePath],
-    hermes_enabled: podfile_properties['expo.jsEngine'] == 'hermes',
-    fabric_enabled: true,
-    app_path: "#{Pod::Config.instance.installation_root}/.."
-  )
+  # Add other Firebase modules as needed
 
   post_install do |installer|
     react_native_post_install(installer)
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-      end
-    end
+    __apply_Xcode_12_5_M1_post_install_workarounds(installer)
   end
 end
