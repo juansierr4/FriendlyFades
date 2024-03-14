@@ -148,7 +148,7 @@ const HomeScreen = () => {
   const handleTapImage = (userId) => {
     setCurrentImageIndices(prevIndices => ({
       ...prevIndices,
-      [userId]: (prevIndices[userId] !== undefined ? (prevIndices[userId] + 1) % users.find(user => user.id === userId).images.length : 1),
+      [userId]: (prevIndices[userId] !== undefined ? (prevIndices[userId] + 1) % users.find(user => user.id === userId).profileImageUrls.length : 1),
     }));
     setSwiperKey(prevkey => prevkey + 1);
   };
@@ -168,7 +168,7 @@ const HomeScreen = () => {
       };
       const matchedUser = users.find(user => user.id === swipedUserId);
       if (matchedUser) {
-        setMatchedUserImageUrl(matchedUser.images[0]); // Assuming images[0] is the profile image
+        setMatchedUserImageUrl(matchedUser.profileImageUrls[0]); // Assuming images[0] is the profile image
         setMatchedUserName(matchedUser.name); // Store the matched user's name
         setMatchModalVisible(true);
         showModal();
@@ -226,7 +226,8 @@ const HomeScreen = () => {
                 activeOpacity={1}
               >
                 <Image
-                  source={{ uri: user.images[currentImageIndex] }}
+                //******************************undefined is not an object currentimageindex instead of 0 */
+                  source={{ uri: user.profileImageUrls[currentImageIndex] }}
                   style={styles.cardImage}
                   resizeMode="cover"
                 />
