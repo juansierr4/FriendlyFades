@@ -12,9 +12,9 @@ target 'FriendlyFades' do
   # Firebase Pods
   pod 'Firebase/CoreOnly', '10.22.0', :modular_headers => false
   pod 'FirebaseAuth', '10.22.0', :modular_headers => false
-  pod 'FirebaseFirestore', '10.22.0', :modular_headers => false
+  pod 'FirebaseFirestore', '10.22.0', :modular_headers => true
   pod 'FirebaseMessaging', '10.22.0', :modular_headers => false
-  pod 'FirebaseStorage', '10.22.0', :modular_headers => false
+  pod 'FirebaseStorage', '10.22.0', :modular_headers => true
 
   # React Native and Expo autolinking
   use_react_native!(
