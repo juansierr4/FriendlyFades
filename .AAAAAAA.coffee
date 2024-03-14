@@ -54,42 +54,6 @@ const HomeScreen = () => {
     );
   };
 
-    useEffect(() => {
-      const fetchUsersData = async () => {
-        const { latitude, longitude } = await fetchCurrentUserLocation();
-        const currentUserUid = auth.currentUser.uid;
-        const swipesRef = collection(db, "swipes");
-        const swipesQuery = query(swipesRef, where("swiperId", "==", currentUserUid));
-        const swipesSnapshot = await getDocs(swipesQuery);
-        const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
-
-        const radiusInM = 10000; // Define search radius
-        const bounds = geohashQueryBounds([latitude, longitude], radiusInM);
-        const promises = bounds.map(b => {
-          const q = query(collection(db, "users"), orderBy("location.geohash"), startAt(b[0]), endAt(b[1]));
-          return getDocs(q);
-        });
-
-        const snapshots = await Promise.all(promises);
-        let matchingDocs = [];
-
-        snapshots.forEach(snap => {
-          snap.docs.forEach(doc => {
-            const location = doc.data().location;
-            const distanceInM = distanceBetween([location.latitude, location.longitude], [latitude, longitude]);
-            if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id)) {
-              matchingDocs.push({ ...doc.data(), id: doc.id });
-            }
-          });
-        });
-
-      setUsers(matchingDocs);
-    };
-
-  useEffect(() => {
-    fetchAndStoreUserLocation().then(fetchUsersData);
-  }, []); // Dependency array left empty to run once on mount
-
   const fetchCurrentUserLocation = () => {
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition(
@@ -98,16 +62,52 @@ const HomeScreen = () => {
           resolve({ latitude, longitude });
         },
         error => reject(error),
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
       );
     });
   };
 
-const handleSwipe = (cardIndex) => {
+  useEffect(() => {
+    const fetchUsersData = async () => {
+      const { latitude, longitude } = await fetchCurrentUserLocation();
+      const currentUserUid = auth.currentUser.uid;
+      const swipesRef = collection(db, "swipes");
+      const swipesQuery = query(swipesRef, where("swiperId", "==", currentUserUid));
+      const swipesSnapshot = await getDocs(swipesQuery);
+      const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
+
+      const radiusInM = 10000; // Define search radius
+      const bounds = geohashQueryBounds([latitude, longitude], radiusInM);
+      const promises = bounds.map(b => {
+        const q = query(collection(db, "users"), orderBy("location.geohash"), startAt(b[0]), endAt(b[1]));
+        return getDocs(q);
+      });
+
+      const snapshots = await Promise.all(promises);
+      let matchingDocs = [];
+
+      snapshots.forEach(snap => {
+        snap.docs.forEach(doc => {
+          const location = doc.data().location;
+          const distanceInM = distanceBetween([location.latitude, location.longitude], [latitude, longitude]);
+          if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id)) {
+            matchingDocs.push({ ...doc.data(), id: doc.id });
+          }
+        });
+      });
+
+      setUsers(matchingDocs);
+    };
+
+    fetchAndStoreUserLocation().then(fetchUsersData);
+  }, []); // Dependency array left empty to run once on mount
+
+
+  const handleSwipe = (cardIndex) => {
     setCurrentCardIndex(cardIndex + 1);
   };
 
-const handleSwipeTop = async (cardIndex) => {
+  const handleSwipeTop = async (cardIndex) => {
     const swipedUserId = users[cardIndex].id;
     const swiperId = auth.currentUser.uid;
 
@@ -121,66 +121,66 @@ const handleSwipeTop = async (cardIndex) => {
     checkForMatch(swiperId, swipedUserId);
   }
 
-const handleSwipeBottom = async (cardIndex) => {
-  const swipedUserId = users[cardIndex].id;
-  const swiperId = auth.currentUser.uid;
+  const handleSwipeBottom = async (cardIndex) => {
+    const swipedUserId = users[cardIndex].id;
+    const swiperId = auth.currentUser.uid;
 
-  await addDoc(collection(db, "swipes"), {
-    swiperId,
-    swipedId: swipedUserId,
-    action: "dislike",
-    timestamp: serverTimestamp(),
-  });
-};
-
-
-
-const checkForMatch = async (swiperId, swipedUserId) => {
-  const swipesRef = collection(db, "swipes");
-  const q = query(swipesRef, where("swiperId", "==", swipedUserId), where("swipedId", "==", swiperId), where("action", "==", "like"));
-
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    // Find matched user's data
-    // Match found, create a new document in the 'matches' collection
-    const matchEntry = {
-      userIds: [swiperId, swipedUserId],
+    await addDoc(collection(db, "swipes"), {
+      swiperId,
+      swipedId: swipedUserId,
+      action: "dislike",
       timestamp: serverTimestamp(),
-    };
-    const matchedUser = users.find(user => user.id === swipedUserId);
-    if (matchedUser) {
-      setMatchedUserImageUrl(matchedUser.images[0]); // Assuming images[0] is the profile image
-      setMatchedUserName(matchedUser.name); // Store the matched user's name
-      setMatchModalVisible(true);
-      showModal();
+    });
+  };
+
+
+
+  const checkForMatch = async (swiperId, swipedUserId) => {
+    const swipesRef = collection(db, "swipes");
+    const q = query(swipesRef, where("swiperId", "==", swipedUserId), where("swipedId", "==", swiperId), where("action", "==", "like"));
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      // Find matched user's data
+      // Match found, create a new document in the 'matches' collection
+      const matchEntry = {
+        userIds: [swiperId, swipedUserId],
+        timestamp: serverTimestamp(),
+      };
+      const matchedUser = users.find(user => user.id === swipedUserId);
+      if (matchedUser) {
+        setMatchedUserImageUrl(matchedUser.images[0]); // Assuming images[0] is the profile image
+        setMatchedUserName(matchedUser.name); // Store the matched user's name
+        setMatchModalVisible(true);
+        showModal();
+      }
+      await addDoc(collection(db, "matches"), matchEntry);
+      console.log(`Match found between ${swiperId} and ${swipedUserId}`);
     }
-    await addDoc(collection(db, "matches"), matchEntry);
-    console.log(`Match found between ${swiperId} and ${swipedUserId}`);
-  }
-};
+  };
 
 
-const showModal = () => {
-  Animated.timing(fadeAnim, {
-    toValue: 1,
-    duration: 500,
-    useNativeDriver: true, // Add this line
-  }).start();
-
-  setTimeout(() => {
+  const showModal = () => {
     Animated.timing(fadeAnim, {
-      toValue: 0,
+      toValue: 1,
       duration: 500,
       useNativeDriver: true, // Add this line
-    }).start(() => setMatchModalVisible(false));
-  }, 3000);
-};
+    }).start();
 
-return (
-  <View style={styles.container}>
-    {users.length > 0 ? (
-      <>
+    setTimeout(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true, // Add this line
+      }).start(() => setMatchModalVisible(false));
+    }, 3000);
+  };
+
+  return (
+    <View style={styles.container}>
+      {users.length > 0 ? (
+        <>
         <Swiper
           key={swiperKey}
           backgroundColor='#800000'
@@ -271,7 +271,7 @@ return (
         </View>
       </Modal>
   </View>
-);
+  );
 }; //End of Home Screen Component
 
   export default HomeScreen;
