@@ -1,99 +1,74 @@
-import 'expo-dev-client';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, Button, Animated } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
-import Geolocation from 'react-native-geolocation-service';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { getFirestore, collection, query, where, doc, setDoc, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import Geolocation from 'react-native-geolocation-service';
+import { getGeoHashRange } from 'geofire-common'; // Ensure this is correctly imported
 import { styles } from './AppStyles.js';
+import { updateUserLocation } from './locationUtils.js'; // Ensure this util is correctly implemented
 
 const HomeScreen = () => {
-  const [users, setUsers] = useState([]); // State to store other users' data
-  const [currentImageIndices, setCurrentImageIndices] = useState({});
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [swiperKey, setSwiperKey] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [matchModalVisible, setMatchModalVisible] = useState(false);
-  const [matchedUserName, setMatchedUserName] = useState('');
-  const [matchedUserImageUrl, setMatchedUserImageUrl] = useState(null);
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial fade anim value
-
-  const db = getFirestore();
-  const auth = getAuth();
-
-  const requestLocationPermission = async () => {
-    let permissionResult = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-    if (permissionResult === RESULTS.DENIED) {
-      permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-    }
-    return permissionResult === RESULTS.GRANTED;
-  };
-
-  const fetchAndStoreUserLocation = async () => {
-    const hasPermission = await requestLocationPermission();
-    if (!hasPermission) {
-      Alert.alert('Location Permission', 'Location permission is required to find users near you.');
-      return;
-    }
-
-    Geolocation.getCurrentPosition(
-      async position => {
-        const { latitude, longitude } = position.coords;
-        const userLocation = { latitude, longitude };
-        //assume method to get uid
-        const currentUserUid = auth.currentUser.uid;
-        //stores location in firebase under user doc
-        await setDoc(doc(db, "users", currentUserUid), { location: userLocation }, { merge: true });
-      },
-      error => {
-        console.error(error);
-        Alert.alert('Error', 'Failed to get your location.');
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
-  };
+    const [users, setUsers] = useState([]); // State to store other users' data
+    const [currentImageIndices, setCurrentImageIndices] = useState({});
+    const [currentCardIndex, setCurrentCardIndex] = useState(0);
+    const [swiperKey, setSwiperKey] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [matchModalVisible, setMatchModalVisible] = useState(false);
+    const [matchedUserName, setMatchedUserName] = useState('');
+    const [matchedUserImageUrl, setMatchedUserImageUrl] = useState(null);
+    const fadeAnim = useRef(new Animated.Value(0)).current; 
+    
+    const db = getFirestore();
+    const auth = getAuth();
 
   useEffect(() => {
-    fetchAndStoreUserLocation();
-    const fetchUsersData = async () => {
-      const { latitude, longitude } = await fetchCurrentUserLocation();
-
-      const currentUser = auth.currentUser;
-      const dbSwipesRef = collection(db, "swipes");
-      const swipesQuery = query(dbSwipesRef, where("swiperId", "==", currentUser.uid));
-      let swipedUserIds = [];
-      
-      try {
-        const swipesSnapshot = await getDocs(swipesQuery);
-        swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
-
-        const usersRef = collection(db, "users");
-        const latRange = [latitude -0.1, latitude + 0.1];
-        const lngRange = [longitude -0.1, longitude + 0.1];
-
-        const usersQuery = query(usersRef, 
-          where("uid", "not-in", [...swipedUserIds, currentUser.uid]),
-          where("latitude", ">=", latRange[0]), where("latitude", "<=", latRange[1]), 
-          where("longitude", ">=", latRange[0]), where("longitude", "<=", lngRange[1]),
-          );
-
-        const usersSnapshot = await getDocs(usersQuery);
-        const usersData = usersSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          images: doc.data().profileImageUrls // Adjust based on your actual image field
-        }));
-
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
+    const requestLocationPermissionAndFetchUsers = () => {
+      Geolocation.requestAuthorization('whenInUse');
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchUsersData(latitude, longitude);
+          updateUserLocation(latitude, longitude, auth.currentUser?.uid); // Ensure this function is defined to update Firestore
+        },
+        (error) => {
+          console.log(error);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
     };
 
-    fetchUsersData();
-  }, [auth.currentUser]);
+    if (auth.currentUser) {
+      requestLocationPermissionAndFetchUsers();
+    }
+  }, [auth.currentUser]); // This useEffect depends on the auth.currentUser
+
+  const fetchUsersData = async (latitude, longitude) => {
+    if (!auth.currentUser) return;
+
+    const { lower, upper } = getGeoHashRange(latitude, longitude, 48280); // Check this function's implementation
+
+    const swipesRef = collection(db, "swipes");
+    const swipesQuery = query(swipesRef, where("swiperId", "==", auth.currentUser.uid));
+    const swipesSnapshot = await getDocs(swipesQuery);
+    const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
+
+    const usersRef = collection(db, "users");
+    const usersWithinGeohashRange = query(
+      usersRef,
+      where("geohash", ">=", lower),
+      where("geohash", "<=", upper),
+      where("uid", "not-in", [auth.currentUser.uid, ...swipedUserIds])
+    );
+    
+    const usersSnapshot = await getDocs(usersWithinGeohashRange);
+    const potentialMatches = usersSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(user => !swipedUserIds.includes(user.uid));
+
+    setUsers(potentialMatches);
+  };
 
   const handleMoreOptions = (userId) => {
     setSelectedUser(userId);
@@ -175,19 +150,6 @@ const checkForMatch = async (swiperId, swipedUserId) => {
   }
 };
 
-const fetchCurrentUserLocation = () => {
-  return new Promise((resolve, reject) => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const { latitude, longitude } = position.coords;
-        resolve({ latitude, longitude });
-      },
-      error => reject(error),
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-    );
-  });
-};
-
 const showModal = () => {
   Animated.timing(fadeAnim, {
     toValue: 1,
@@ -223,7 +185,7 @@ return (
           stackSeparation={15}
           useViewOverflow={Platform.OS === 'ios'}
           cards={users}
-          
+
           renderCard={(user) => {
             const currentImageIndex = currentImageIndices[user.id] || 0;
             const showDetails = currentImageIndex === 0;
