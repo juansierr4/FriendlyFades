@@ -4,6 +4,7 @@ import Swiper from 'react-native-deck-swiper';
 import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { styles } from './AppStyles.js';
+import { updateUserLocation } from './locationUtils.js';
 
 const HomeScreen = () => {
   const [users, setUsers] = useState([]); // State to store other users' data
@@ -21,32 +22,52 @@ const HomeScreen = () => {
   const auth = getAuth();
 
   useEffect(() => {
+    const requestLocationPermission = async () => {
+        Geolocation.requestAuthorization('whenInUse');
+      
+      Geolocation.getCurrentPosition(
+        (position) =>{
+        const { latitude, longitude } = position.coords;
+        fetchNearbyUsers(latitude, longitude);
+        updateUserLocation(latitude, longitude);
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
+      );
+    };
+    requestLocationPermission();
+  }, []);
+
     const fetchUsersData = async () => {
       const currentUser = auth.currentUser;
-      const dbSwipesRef = collection(db, "swipes");
-      const swipesQuery = query(dbSwipesRef, where("swiperId", "==", currentUser.uid));
-      let swipedUserIds = [];
+      if (!currentUser) return;
 
-      try {
+      const { lower, upper } = getGeoHashRange(latitude, longitude, 48270);
+
+      try{
+        const dbSwipesRef = collection(db, "swipes");
+        const swipesQuery = query(dbSwipesRef, where("swiperId", "==", currentUser.uid));
         const swipesSnapshot = await getDocs(swipesQuery);
-        swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
-
+        const swipedUserIds = swipesSnapshot.docs.map(doc => doc.data().swipedId);
         const usersRef = collection(db, "users");
-        const usersQuery = query(usersRef, where("uid", "not-in", [...swipedUserIds, currentUser.uid]));
 
-        const usersSnapshot = await getDocs(usersQuery);
-        const usersData = usersSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          images: doc.data().profileImageUrls // Adjust based on your actual image field
-        }));
-
-        setUsers(usersData);
-      } catch (error) {
+        const usersWithinGeohashRange = query(usersRef,
+          where("geohash", ">=", lower),
+          where("geohash", "<=", upper)
+          );
+        const usersSnapshot = await getDocs(usersWithinGeohashRange);
+          
+        const potentialMatches = usersSnapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data(), images: doc.data().profileImageUrls }))
+          .filter(user => !swipedUserIds.includes(user.uid) && user.uid !== currentUser.uid);
+          
+        setUsers(potentialMatches);
+      } catch(error){
         console.error("Error fetching users:", error);
       }
     };
-
     fetchUsersData();
   }, [auth.currentUser]);
 
