@@ -4,6 +4,7 @@ import Swiper from 'react-native-deck-swiper';
 import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import Geolocation from 'react-native-geolocation-service';
+import { requestTrackingAuthorization, getTrackingStatus } from 'react-native-tracking-transparency';
 import { getGeoHashRange } from 'geofire-common'; // Ensure this is correctly imported
 import { styles } from './AppStyles.js';
 import { updateUserLocation } from './locationUtils.js'; // Ensure this util is correctly implemented
@@ -24,31 +25,55 @@ const HomeScreen = () => {
     const auth = getAuth();
 
   useEffect(() => {
+    const prepareApp = async () => {
+      const trackingStatus = await getTrackingStatus();
+      if (trackingStatus === 'not-determined') {
+        await requestTrackingAuthorization();
+      }
+    }
+
     const requestLocationPermissionAndFetchUsers = () => {
       Geolocation.requestAuthorization('whenInUse');
       Geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          fetchUsersData(latitude, longitude);
-          updateUserLocation(latitude, longitude, auth.currentUser?.uid); // Ensure this function is defined to update Firestore
+          console.log(`Location obtained: ${latitude}, ${longitude}`);
+          if (auth.currentUser && auth.currentUser.uid) { // Ensure currentUser and UID are present
+            console.log('Updating user location...');
+            updateUserLocation(latitude, longitude, auth.currentUser.uid); // Update user location
+            console.log('Fetching nearby users...');
+            fetchUsersData(latitude, longitude); // Fetch nearby users
+          } else {
+            console.error('Auth currentUser UID is undefined.');
+          }
         },
         (error) => {
-          console.log(error);
+          console.error('Error obtaining location:', error);
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
       );
-    };
+
+    requestLocationPermissionAndFetchUsers();
+  };
 
     if (auth.currentUser) {
-      requestLocationPermissionAndFetchUsers();
+      prepareApp();
     }
   }, [auth.currentUser]); // This useEffect depends on the auth.currentUser
 
   const fetchUsersData = async (latitude, longitude) => {
-    if (!auth.currentUser) return;
-
-    const { lower, upper } = getGeoHashRange(latitude, longitude, 48280); // Check this function's implementation
-
+    if (!auth.currentUser || !latitude || !longitude) {
+      console.error('Missing user information or geolocation data.');
+      return;
+    }
+  
+    const { lower, upper } = getGeoHashRange(latitude, longitude, 48280); // 48280 meters ≈ 30 miles
+  
+    if (!lower || !upper) {
+      console.error('Invalid geohash range.');
+      return;
+    }
+    
     const swipesRef = collection(db, "swipes");
     const swipesQuery = query(swipesRef, where("swiperId", "==", auth.currentUser.uid));
     const swipesSnapshot = await getDocs(swipesQuery);
@@ -237,7 +262,7 @@ return (
         </Modal>
       </>
     ) : (
-      <Text>There are no more users in your area. Come back another time...</Text>
+      <Text  style={styles.text}>There are no more users in your area. Come back another time...</Text>
     )}
     <Modal
         animationType="none"
