@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, Modal, Button, Animated } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Modal, Button, Animated, Platform } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
