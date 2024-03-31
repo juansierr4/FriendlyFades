@@ -7,7 +7,7 @@ import { Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 const settingsIcon = require('./images/Settings.png');
-const editIcon = require('./images/editIcon.png');
+const ViewIcon = require('./images/ViewIcon.png');
 
 //Beginning of ProfileScreen Component
 const ProfileScreen = ({ navigation }) => {
@@ -111,7 +111,7 @@ const ProfileScreen = ({ navigation }) => {
         }
       }
     };
-    const GoPremium = ({ onPress }) => (
+    /*const GoPremium = ({ onPress }) => (
       <View style={styles.goPremiumContainer}>
         <Text style={styles.goPremiumTitle}>Go Premium</Text>
         <Text style={styles.goPremiumText}>Unlock exclusive features:</Text>
@@ -122,7 +122,8 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.goPremiumButtonText}>Upgrade Now</Text>
         </TouchableOpacity>
       </View>
-    );
+    );*/
+
     const handleLogout = () => {
       signOut(auth)
         .then(() => {
@@ -146,13 +147,12 @@ const ProfileScreen = ({ navigation }) => {
             <TouchableOpacity 
                 style={styles.editImageButton}
                 onPress={() => navigation.navigate('ViewSelfProfile', { userData: userDetails })} // Assuming 'EditProfileScreen' is the route name
-            ><Image source={editIcon} style={styles.editIcon} />
+            ><Image source={ViewIcon} style={styles.ViewIcon} />
             </TouchableOpacity>
         <Text style={styles.detailText}>{userDetails.name}</Text>
         <Text style={styles.detailText}>Age: {userDetails.age}</Text>
         <Text style={styles.detailText}>Height: {userDetails.height}</Text>
         <Text style={styles.detailText}>Weight: {userDetails.weight}</Text>
-        <GoPremium onPress={() => navigation.navigate('Premium')} />
         <TouchableOpacity style={styles.settingsIcon} onPress={toggleSettings}>
           <Image source={settingsIcon} style={styles.settingsImage} />
         </TouchableOpacity>
@@ -166,9 +166,8 @@ const ProfileScreen = ({ navigation }) => {
     <TouchableOpacity style={styles.settingsIcon} onPress={toggleSettings}>
           <Image source={settingsIcon} style={styles.settingsImage} />
         </TouchableOpacity>
-    <TouchableOpacity onPress={() => Alert.alert('Contact Support')}><Text style={styles.menuItem} >Contact Support</Text></TouchableOpacity>
-    <TouchableOpacity onPress={() => navigation.navigate('termsOfService')}><Text style={styles.menuItem} >Terms of Service</Text></TouchableOpacity>
-    <TouchableOpacity onPress={() => Alert.alert('Friendly Fades Premium')}><Text style={styles.menuItem} >Friendly Fades Premium</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => Alert.alert('Contact Support at support@friendlyfades.com')}><Text style={styles.menuItem} >Contact Support</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('TermsOfService')}><Text style={styles.menuItem} >Terms of Service</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleLogout}><Text style={styles.menuItem} >Logout</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleDeleteAccount}><Text style={styles.menuItem} >Delete Account</Text></TouchableOpacity>
   </Animated.View>

@@ -3,7 +3,7 @@ import { ScrollView, Text } from 'react-native';
 import { styles } from './AppStyles.js';
 
 
-const termsOfService = ({ navigation }) => {
+const TermsOfService = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
       <Text style={[styles.heading, { fontSize: 36, textAlign: 'center', top: 30, marginBottom: 20 }]}>Terms of Service</Text>
@@ -232,4 +232,4 @@ const termsOfService = ({ navigation }) => {
   );
 };
 
-export default termsOfService;
+export default TermsOfService;

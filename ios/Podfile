@@ -11,8 +11,10 @@ target 'FriendlyFades' do
   use_expo_modules!
   config = use_native_modules!
 
+
   # Firebase Pods
   pod 'Firebase/CoreOnly', '10.22.0'
+  pod 'FirebaseAnalytics', '10.22.0'
   pod 'FirebaseAuth', '10.22.0'
   pod 'FirebaseFirestore', '10.22.0'
   pod 'FirebaseMessaging', '10.22.0'
@@ -22,18 +24,54 @@ target 'FriendlyFades' do
   # React Native and Expo autolinking
   use_react_native!(
     :path => config[:reactNativePath],
-    :hermes_enabled => false # Modify as needed for Hermes
+    :hermes_enabled => false, # Modify as needed for Hermes
   )
+
+  def node_require(script)
+    require Pod::Executable.execute_command('node', ['-p',
+  "require.resolve(
+    '#{script}',
+    {paths: [process.argv[1]]},
+    )", __dir__]).strip
+  end
+
+  node_require('react-native/scripts/react_native_pods.rb')
+  node_require('react-native-permissions/scripts/setup.rb')
+  require_relative '../node_modules/react-native/scripts/react_native_pods'
+  require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+  require_relative '../node_modules/react-native-permissions/scripts/setup'
+
+  setup_permissions([
+    'LocationWhenInUse',
+    'Notifications',
+    'PhotoLibrary',
+  ])
+
+  #permissions_path = '../node_modules/react-native-permissions/ios'
+  #pod 'Permission-AppTrackingTransparency', :path => "#{permissions_path}/AppTrackingTransparency.podspec"
+  #pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral.podspec"
+  #pod 'Permission-Calendars', :path => "#{permissions_path}/Calendars.podspec"
+  #pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+  #pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts.podspec"
+  #pod 'Permission-FaceID', :path => "#{permissions_path}/FaceID.podspec"
+  #pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways.podspec"
+  #pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
+  #pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary.podspec"
+  #pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
+  #pod 'Permission-Motion', :path => "#{permissions_path}/Motion.podspec"
+  #pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
+  #pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
+  #pod 'Permission-Reminders', :path => "#{permissions_path}/Reminders.podspec"
+  #pod 'Permission-Siri', :path => "#{permissions_path}/Siri.podspec"
+  #pod 'Permission-SpeechRecognition', :path => "#{permissions_path}/SpeechRecognition.podspec"
+  #pod 'Permission-StoreKit', :path => "#{permissions_path}/StoreKit.podspec"
+
 
   post_install do |installer|
     react_native_post_install(installer)
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
-<<<<<<< HEAD
         #config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-=======
-        config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
->>>>>>> d895bd292f3817a0c6b043a36e4c28bbeb886350
         config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
       end
     end

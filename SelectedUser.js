@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Button, Modal } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Button, Modal, Alert } from 'react-native';
 import { styles } from './AppStyles'; // Assuming this import path is correct
 import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -23,10 +23,6 @@ const SelectedUser = ({ route, navigation }) => {
   };
 
   const handleReportUser = async (reportedUserId, reason) => {
-    if (!reportReason.trim()) {
-      Alert.alert("Report Error", "Please provide a reason for reporting.");
-      return;
-    }
     const reporterId = auth.currentUser.uid;
 
     try {

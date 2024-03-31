@@ -13,10 +13,10 @@ import ProfileScreen from './ProfileScreen';
 import SignUpScreen from './SignUpScreen';
 import SelectedUser from './SelectedUser';
 import ViewSelfProfile from './ViewSelfProfile';
-import { PhoneNumberScreen, ConfirmationScreen, EmailInputScreen, WelcomeScreen } from './RegistrationScreens';
+import { PhoneNumberScreen, ConfirmationScreen, WelcomeScreen } from './RegistrationScreens';
 import { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage, BioInput, EmailInput, PasswordInput, FinalStep } from './CreateAccountScreen';
 import LoginScreen from './LoginScreen';
-import termsOfService from './termsOfService';
+import TermsOfService from './TermsOfService';
 
 import AppIcon from './images/FriendlyFadesLogo.png';
 import MessageIcon from './images/Message.png';
@@ -54,7 +54,6 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="EmailInputScreen" component={EmailInputScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} options={{ headerShown: false }} />
         <Stack.Screen name="PhoneNumberScreen" component={PhoneNumberScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MessagesScreen" component={MessagesScreen} options={{ headerShown: false }}/>
@@ -71,7 +70,7 @@ export default function App() {
         <Stack.Screen name="FinalStep" component={FinalStep} options={{ headerShown: false }} />
         <Stack.Screen name="SelectedUser" component={SelectedUser} options={{ headerShown: false }} />
         <Stack.Screen name="ViewSelfProfile" component={ViewSelfProfile} options={{ headerShown: false }} />
-        <Stack.Screen name="termsOfService" component={termsOfService} options={{ headerShown: false }} />
+        <Stack.Screen name="TermsOfService" component={TermsOfService} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

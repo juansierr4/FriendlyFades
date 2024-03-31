@@ -55,9 +55,6 @@ function SignUpScreen({ navigation }) {
         <Text style={styles.buttonText}>Create an Account</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.button} onPress={signInWithAppleAsync}>
-        <Text style={styles.buttonText}>Sign Up with Apple</Text>
-      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.switchText}>Already have an account? Log In</Text>
       </TouchableOpacity>
