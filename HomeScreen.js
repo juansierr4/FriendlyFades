@@ -1,13 +1,15 @@
-import 'expo-dev-client';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, Button, Animated, Alert, Platform } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
+import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import Geolocation from 'react-native-geolocation-service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { getFirestore, collection, query, where, doc, setDoc, getDocs, addDoc, serverTimestamp, orderBy, startAt, endAt } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { geohashForLocation, geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { styles } from './AppStyles.js';
+import { updateUserLocation } from './locationUtils.js'; // Ensure this util is correctly implemented
 
 const HomeScreen = () => {
   const [users, setUsers] = useState([]);
@@ -261,7 +263,7 @@ const HomeScreen = () => {
           stackSeparation={15}
           useViewOverflow={Platform.OS === 'ios'}
           cards={users}
-          
+
           renderCard={(user) => {
             const currentImageIndex = currentImageIndices[user.id] || 0;
             const showDetails = currentImageIndex === 0;
