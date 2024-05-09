@@ -16,7 +16,7 @@ import ViewSelfProfile from './ViewSelfProfile';
 import { PhoneNumberScreen, ConfirmationScreen, WelcomeScreen } from './RegistrationScreens';
 import { NameInput, GenderInput, AgeInput, HeightInput, WeightInput, UploadImage, BioInput, EmailInput, PasswordInput, FinalStep } from './CreateAccountScreen';
 import LoginScreen from './LoginScreen';
-import TermsOfService from './TermsOfService';
+import TermsOfService from './termsOfService';
 
 import AppIcon from './images/FriendlyFadesLogo.png';
 import MessageIcon from './images/Message.png';

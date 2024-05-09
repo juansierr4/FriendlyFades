@@ -13,12 +13,13 @@ target 'FriendlyFades' do
 
 
   # Firebase Pods
-  pod 'Firebase/CoreOnly', '10.22.0'
-  pod 'FirebaseAnalytics', '10.22.0'
-  pod 'FirebaseAuth', '10.22.0'
-  pod 'FirebaseFirestore', '10.22.0'
-  pod 'FirebaseMessaging', '10.22.0'
-  pod 'FirebaseStorage', '10.22.0'
+  pod 'Firebase/CoreOnly'#, '10.23.1'
+  pod 'FirebaseAnalytics'#, '10.23.1'
+  pod 'FirebaseAuth'#, '10.22.0'
+  pod 'FirebaseFirestore'#, '10.23.1'
+  pod 'FirebaseMessaging'#, '10.22.0'
+  pod 'FirebaseStorage'#, '10.22.0'
+  pod 'Firebase/Crashlytics'#, '10.22.0'
   # No need to specify modular_headers for individual pods now
 
   # React Native and Expo autolinking

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, Modal, Button, Animated, Alert, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, Image, Button, Animated, Alert, ActivityIndicator, Platform, TextInput } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-deck-swiper';
-import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import Geolocation from 'react-native-geolocation-service';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { getFirestore, collection, query, where, doc, setDoc, getDocs, addDoc, serverTimestamp, orderBy, startAt, endAt } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, query, where, doc, setDoc, getDoc, getDocs, addDoc, serverTimestamp, orderBy, startAt, endAt } from 'firebase/firestore';
 import { geohashForLocation, geohashQueryBounds, distanceBetween } from 'geofire-common';
 import { styles } from './AppStyles.js';
 import { updateUserLocation } from './locationUtils.js'; // Ensure this util is correctly implemented
@@ -21,6 +20,8 @@ const HomeScreen = () => {
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUserName, setMatchedUserName] = useState('');
   const [matchedUserImageUrl, setMatchedUserImageUrl] = useState(null);
+  const [reportReason, setReportReason] = useState('');
+  const [showReportReasonInput, setShowReportReasonInput] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const db = getFirestore();
@@ -29,7 +30,7 @@ const HomeScreen = () => {
   const requestLocationPermission = async () => {
     console.log("Checking for location permission");
     let permissionResult = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-    console.log("Current location permission status: ${permissionResult}");
+    console.log('Current location permission status: ${permissionResult}');
     if (permissionResult === RESULTS.DENIED) {
       permissionResult = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
     }
@@ -78,6 +79,21 @@ const HomeScreen = () => {
     const fetchUsersData = async () => {
       const { latitude, longitude } = await fetchCurrentUserLocation();
       const currentUserUid = auth.currentUser.uid;
+      const currentUserDoc = await getDoc(doc(db, "users", currentUserUid));
+      const currentUserGender = currentUserDoc.data().gender;
+
+      const blockQuery = query(collection(db, "blocks"), where("blockerId", "==", currentUserUid));
+      const blockedByQuery = query(collection(db, "blocks"), where("blockedUserId", "==", currentUserUid));
+
+      const [blockSnapshot, blockedBySnapshot] = await Promise.all([
+        getDocs(blockQuery),
+        getDocs(blockedByQuery)
+      ]);
+
+      const blockedUsers = new Set();
+      blockSnapshot.docs.forEach(doc => blockedUsers.add(doc.data().blockedUserId));
+      blockedBySnapshot.docs.forEach(doc => blockedUsers.add(doc.data().blockerId));
+
       const swipesRef = collection(db, "swipes");
       const swipesQuery = query(swipesRef, where("swiperId", "==", currentUserUid));
       const swipesSnapshot = await getDocs(swipesQuery);
@@ -86,7 +102,12 @@ const HomeScreen = () => {
       const radiusInM = 10000; // Define search radius
       const bounds = geohashQueryBounds([latitude, longitude], radiusInM);
       const promises = bounds.map(b => {
-        const q = query(collection(db, "users"), orderBy("location.geohash"), startAt(b[0]), endAt(b[1]));
+        const q = query(
+          collection(db, "users"), 
+          where("gender", "==", currentUserGender),
+          orderBy("location.geohash"), 
+          startAt(b[0]), 
+          endAt(b[1]));
         return getDocs(q);
       });
 
@@ -97,7 +118,7 @@ const HomeScreen = () => {
         snap.docs.forEach(doc => {
           const location = doc.data().location;
           const distanceInM = distanceBetween([location.latitude, location.longitude], [latitude, longitude]);
-          if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id)) {
+          if (distanceInM <= radiusInM && !swipedUserIds.includes(doc.id) && doc.id !== currentUserUid) { // Exclude current user's profile
             matchingDocs.push({ ...doc.data(), id: doc.id });
           }
         });
@@ -122,22 +143,31 @@ const HomeScreen = () => {
       return newUsers;
     });
 
-    setCurrentCardIndex(cardIndex + 1);
+    setCurrentCardIndex((prevIndex) => prevIndex < users.length - 1 ? prevIndex + 1 : 0);
   };
 
   const handleSwipeTop = async (cardIndex) => {
-    const swipedUserId = users[cardIndex].id;
-    const swiperId = auth.currentUser.uid;
-
-    await addDoc(collection(db, "swipes"), {
-      swiperId,
-      swipedId: swipedUserId,
-      action: "like",
-      timestamp: serverTimestamp(),
-    });
-
-    checkForMatch(swiperId, swipedUserId);
-  }
+    // Check if the cardIndex is within the bounds of the users array
+    if (cardIndex < users.length) {
+      const swipedUserId = users[cardIndex].id; // Safely get the swiped user's ID
+      const swiperId = auth.currentUser.uid; // Get the swiper's ID
+  
+      // Proceed to add a document to the "swipes" collection in Firestore
+      await addDoc(collection(db, "swipes"), {
+        swiperId,
+        swipedId: swipedUserId,
+        action: "like",
+        timestamp: serverTimestamp(),
+      });
+  
+      // Check for a match
+      checkForMatch(swiperId, swipedUserId);
+    } else {
+      // Optionally handle the case where cardIndex is out of bounds
+      // This could be logging an error, showing a message, etc.
+      console.log("Swiped on an index out of bounds: ", cardIndex);
+    }
+  };
 
   const handleSwipeBottom = async (cardIndex) => {
     const swipedUserId = users[cardIndex].id;
@@ -152,11 +182,14 @@ const HomeScreen = () => {
   };
 
   const handleTapImage = (userId) => {
-    setCurrentImageIndices(prevIndices => ({
-      ...prevIndices,
-      [userId]: (prevIndices[userId] !== undefined ? (prevIndices[userId] + 1) % users.find(user => user.id === userId).profileImageUrls.length : 1),
-    }));
-    setSwiperKey(prevkey => prevkey + 1);
+    const user = users.find(user => user.id === userId);
+    if (user && user.profileImageUrls.length > 1) { // Check if user has more than one image
+      setCurrentImageIndices(prevIndices => ({
+        ...prevIndices,
+        [userId]: (prevIndices[userId] !== undefined ? (prevIndices[userId] + 1) % user.profileImageUrls.length : 1),
+      }));
+      setSwiperKey(prevKey => prevKey + 1);
+    }
   };
 
   const handleMoreOptions = (userId) => {
@@ -176,12 +209,15 @@ const HomeScreen = () => {
       });
       Alert.alert("User Reported", "Thank you for reporting. We will investigate the matter.");
       console.log("User reported successfully.");
+      setModalVisible(false);
+      setShowReportReasonInput(false);
+      setReportReason('');
       // Optionally, show a confirmation message or navigate back
     } catch (error) {
       console.error("Error reporting user: ", error);
+    setShowReportReasonInput(false);
+    setReportReason(''); // Reset the report reason
     }
-    setModalVisible(false);
-    setReportReason(""); // Reset the report reason
   };
 
   const handleBlockUser = async (blockedUserId) => {
@@ -199,6 +235,7 @@ const HomeScreen = () => {
     setModalVisible(false);
     } catch (error) {
     console.error("Error blocking user: ", error);
+    Alert.alert("Error", "Failed to block user.");
     }
   };
 
@@ -274,11 +311,11 @@ const HomeScreen = () => {
                 onPress={() => handleTapImage(user.id)}
                 activeOpacity={1}
               >
-                <Image
+                <FastImage
                 //******************************undefined is not an object currentimageindex instead of 0 */
-                  source={{ uri: user.profileImageUrls[currentImageIndex] }}
+                  source={{ uri: user.profileImageUrls[currentImageIndex], priority: FastImage.priority.normal }}
                   style={styles.cardImage}
-                  resizeMode="cover"
+                  resizeMode={FastImage.resizeMode.cover}
                 />
                 <TouchableOpacity style={styles.moreOptionsButton} onPress={() => handleMoreOptions(user.id)}>
                   <Text style={styles.moreOptionsText}>•••</Text>
@@ -305,20 +342,44 @@ const HomeScreen = () => {
           visible={modalVisible}
           onRequestClose={() => {
             setModalVisible(!modalVisible);
+            setShowReportReasonInput(false);
           }}>
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Button title="Block User" onPress={() => handleBlockUser(selectedUser.id)} />
-              <Button title="Report User" onPress={() => handleReportUser(selectedUser.id)} />
-              <Button title="Cancel" onPress={() => setModalVisible(!modalVisible)} />
-            </View>
-          </View>
-        </Modal>
+          <View style={styles.modalView}>
+      {showReportReasonInput ? (
+        <>
+          <TextInput
+            style={styles.textInputStyle} 
+            onChangeText={setReportReason}
+            value={reportReason}
+            placeholder="Enter reason for reporting"
+          />
+          <Button title="Submit Report" onPress={() => {
+            handleReportUser(selectedUser.id, reportReason);
+            setShowReportReasonInput(false); // Hide the input field after submitting
+          }} />
+        </>
+      ) : (
+        <>
+          <Button title="Block User" onPress={() => handleBlockUser(selectedUser.id)} />
+          <Button title="Report User" onPress={() => setShowReportReasonInput(true)} />
+        </>
+      )}
+      <Button title="Cancel" onPress={() => {
+        setModalVisible(!modalVisible);
+        setShowReportReasonInput(false); // Also reset this
+        setReportReason(''); // Reset report reason when cancelling
+      }} />
+    </View>
+  </View>
+</Modal>
       </>
     ) : allUsersLoaded ? (
-      <Text style = {styles.text}>There are no more users in your area. Come back another time...</Text>
+      <Text style={styles.text}>No more users...</Text>
     ) : (
-      <Text style = {styles.text}>Loading more users...</Text>
+      <>
+      <ActivityIndicator size="large" color="white"/>
+      <Text style ={styles.text}>Loading more users...</Text></>
     )}
     <Modal
         animationType="none"

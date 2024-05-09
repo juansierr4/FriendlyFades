@@ -145,7 +145,7 @@ const ProfileScreen = ({ navigation }) => {
                 <Image source={require('./images/Profile.png')} style={styles.profileImage} />
             )}
             <TouchableOpacity 
-                style={styles.editImageButton}
+                style={styles.viewImageButton}
                 onPress={() => navigation.navigate('ViewSelfProfile', { userData: userDetails })} // Assuming 'EditProfileScreen' is the route name
             ><Image source={ViewIcon} style={styles.ViewIcon} />
             </TouchableOpacity>
@@ -166,7 +166,7 @@ const ProfileScreen = ({ navigation }) => {
     <TouchableOpacity style={styles.settingsIcon} onPress={toggleSettings}>
           <Image source={settingsIcon} style={styles.settingsImage} />
         </TouchableOpacity>
-    <TouchableOpacity onPress={() => Alert.alert('Contact Support at support@friendlyfades.com')}><Text style={styles.menuItem} >Contact Support</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => Alert.alert('Contact Support at support@friendlyfades.org')}><Text style={styles.menuItem} >Contact Support</Text></TouchableOpacity>
     <TouchableOpacity onPress={() => navigation.navigate('TermsOfService')}><Text style={styles.menuItem} >Terms of Service</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleLogout}><Text style={styles.menuItem} >Logout</Text></TouchableOpacity>
     <TouchableOpacity onPress={handleDeleteAccount}><Text style={styles.menuItem} >Delete Account</Text></TouchableOpacity>

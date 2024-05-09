@@ -61,6 +61,24 @@ export const styles = StyleSheet.create({
       marginVertical: 0, // Reduce or adjust as needed
       paddingHorizontal: 0, // Adjust if necessary
     },
+    termsContainer: {
+      flex: 1
+    },
+    backButtonContainer: {
+      position: 'absolute',
+      top: 40,
+      left: 10,
+      zIndex: 10,
+    },
+    backButton: {
+      padding: 10, // Adjust padding as needed
+      backgroundColor: '#9e2a2b', // Use your theme color
+      borderRadius: 5, // Optional: round the corners
+    },
+    backButtonText: {
+      color: '#FFFFFF', // Button text color
+      fontSize: 16, // Adjust the font size as needed
+    },
     termstext: {
       fontSize: 20,
       fontFamily: 'Times New Roman',
@@ -251,14 +269,14 @@ export const styles = StyleSheet.create({
       padding: 20, // Adjust as needed
       margin: 0, // Ensure no extra margin  
     },
-    editImageButton: {
+    viewImageButton: {
       position: 'absolute',
       borderRadius: 20,   
       left:20, 
   },
-    editIcon: {
-      width: 40, // Adjust based on your icon size
-      height: 40, // Adjust based on your icon size
+    ViewIcon: {
+      width: 40, 
+      height: 40, 
       borderRadius: 10,   
   },
     button: {

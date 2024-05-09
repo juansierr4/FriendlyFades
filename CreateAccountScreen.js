@@ -85,7 +85,16 @@ function AgeInput({ navigation, route }) {
       return;
     }
     const age = calculateAge(year, month, day);
+    if (age < 18) {
+      Alert.alert("You are too young", "Come back when you are 18", [
+        {
+          text: "OK",
+          onPress: () => navigation.navigate('SignUp'),
+        },
+      ]);
+    } else{
     navigation.navigate('HeightInput', { ...route.params, age });
+    }
   };
 
   return (
@@ -254,8 +263,8 @@ function UploadImage({ navigation, route }){
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [3, 4],
-      quality: 1,
-      selectionLimit: 4, // No limit on selections
+      quality: .2,
+      selectionLimit: 4, // Limit on selections
     });
    
     console.log(pickerResult); // Debugging line
@@ -271,18 +280,19 @@ function UploadImage({ navigation, route }){
       Alert.alert("Please select an image first.");
       return;
     }
-    try {
-      // Upload images one by one
-      const urls = [];
-      for (const image of images) {
+    const urls = [];
+    for (const image of images) {
+      try {
         const url = await uploadImageAsync(image);
         urls.push(url);
+      } catch(error) {
+        console.error("Failed to upload images", error);
+        Alert.alert("Failed to upload image.");
+        return;
       }
-    navigation.navigate('BioInput', { ...route.params, profileImageUrls: urls });
-    } catch(error){
-      console.error("Failed to upload images", error);
-      Alert.alert("Failed to upload image.");
     }
+    navigation.navigate('BioInput', { ...route.params, profileImageUrls: urls });
+    
   };
 
   return (
@@ -295,7 +305,7 @@ function UploadImage({ navigation, route }){
           <Image key={index} source={{ uri: image }} style={{ width: 100, height: 200 }} />
         ))}
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleNext}>
+      <TouchableOpacity style={styles.button} onPress={handleNext}> 
         <Text>Next</Text>
       </TouchableOpacity>
     </View>
